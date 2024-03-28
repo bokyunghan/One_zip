@@ -18,7 +18,6 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@Service
 @Slf4j
 public class MemberService {
     @Autowired

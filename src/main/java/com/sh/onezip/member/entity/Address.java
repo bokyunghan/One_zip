@@ -41,8 +41,8 @@ public class Address {
     private String detailAddress;
 
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+//    @ManyToOne
+//    @JoinColumn(name = "member_id")
+//    private Member member;
 
 }
