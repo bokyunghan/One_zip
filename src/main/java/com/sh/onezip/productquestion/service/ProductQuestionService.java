@@ -1,5 +1,6 @@
 package com.sh.onezip.productquestion.service;
 
+import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productquestion.dto.ProductQuestionCreateDto;
 import com.sh.onezip.productquestion.dto.ProductQuestionDto;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
@@ -8,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,4 +48,17 @@ public class ProductQuestionService {
         ProductQuestion productQuestion = modelMapper.map(productQuestionCreateDto, ProductQuestion.class);
         productQuestionRepository.save(productQuestion);
     }
+
+    public ProductQuestion findQuestuinById(Long questionId) {
+        ProductQuestion productQuestion = productQuestionRepository.findById(questionId).orElse(null);
+        return productQuestion;
+    }
+
+    public void deleteQuestionById(Long questionId) {
+        productQuestionRepository.deleteById(questionId);
+    }
+
+    // HBK start
+
+
 }

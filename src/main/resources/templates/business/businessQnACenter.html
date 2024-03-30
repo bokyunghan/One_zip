@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/default}">
+<head>
+</head>
+<style layout:fragment="style">
+    div[data-product-id] {
+        cursor: pointer;
+    }
+</style>
+<div layout:fragment="content">
+<!-- nav start  -->
+    <div class="grid justify-items-center m-11 mx-64">
+        <div class="border-b border-gray-200">
+            <div class="sm:flex sm:items-baseline">
+                <div class="mt-4 sm:ml-10 sm:mt-0">
+                    <nav class="-mb-px flex space-x-8">
+                        <a th:href="@{'/business/productUpdateList.do?id=' + ${product.id}}" id="productUpdateButton" onclick="changeButtonStyle('productUpdateButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품상세페이지</a>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900" id="businessQnACenter" onclick="changeButtonStyle('businessQnACenter')">
+                            상품문의게시판
+                        </h3>
+                        <a th:href="@{'/business/businessAllReview.do?id='+ ${product.id}}" id="productReviewButton" onclick="changeButtonStyle('productReviewButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품리뷰모음</a>
+                        <a th:href="@{'/business/businessPayDeliveryList.do?id='+ ${product.id}}" id="productPayDeliveryButton" onclick="changeButtonStyle('productPayDeliveryButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품결제 및 배송여부</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+</div>
+    <!-- nav end  -->
+    <p class="text-lg font-semibold text-gray-800 text-center">총 [[${totalCount}]]건의 상품 질문이 조회되었습니다.</p>
+    <div th:each="pquestion, status : ${pquestion}"  th:data-product-id="${pquestion.id}" class="group relative mt-12">
+        <div class="grid justify-items-center m-11 mx-64">
+            <ul role="list" class="divide-y divide-gray-100">
+                <li class="flex justify-between gap-x-6 py-3">
+                    <div class="flex min-w-0 gap-x-4">
+                        <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""> <!-- 이미지 크기를 h-12, w-12에서 h-10, w-10으로 수정 -->
+                        <div class="min-w-0 flex-auto">
+                            <p class="text-base font-semibold leading-5 text-gray-900" th:text="|질문작성자 : ${pquestion.member.name}|"></p>
+                            <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|이메일 : ${pquestion.member.email}|"></p>
+                        </div>
+                    </div>
+                    <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                        <!-- 질문에 대한 답변이 있을때 -->
+                        <div th:if="${pquestion.productAnswer != null}" th:data-product-id="${pquestion.product.id}">
+                        <p class="text-xs leading-5 text-gray-900" th:if="|답변 완료${pquestion.productAnswer.aContent != null}|"></p>
+                        <p class="text-xs leading-5 text-gray-900" th:if="${pquestion.productAnswer.aContent == null}">답변 대기중</p>
+                        </div>
+                        <!-- 질문에 대한 답변이 없을때 -->
+                        <div th:if="${pquestion.productAnswer == null}">답변 대기중</div>
+                        <p class="mt-1 text-xxs leading-4 text-gray-500" th:text="|작성일자 : ${pquestion.qRegdate}|"></p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+<script layout:fragment="script">
+    // 페이지가 로드될 때 실행될 함수입니다.
+    document.addEventListener('DOMContentLoaded', function() {
+        // '상품문의게시판' 버튼과 '상품리뷰모음' 버튼을 가져옵니다.
+        const productUpdateButton = document.getElementById('productUpdateButton');
+        const productReviewButton = document.getElementById('productReviewButton');
+        const productPayDeliveryButton = document.getElementById('productPayDeliveryButton');
+        // '상품상세페이지' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+        productUpdateButton.addEventListener('click', function() {
+            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+            changeButtonStyle('productUpdateButton');
+        });
+        // '상품리뷰모음' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+        productReviewButton.addEventListener('click', function() {
+            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+            changeButtonStyle('productReviewButton');
+        });
+        // '상품결제및배송여부' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+        productPayDeliveryButton.addEventListener('click', function() {
+            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+            changeButtonStyle('productPayDeliveryButton');
+        });
+    });
+
+    // 버튼 스타일을 변경하는 함수입니다.
+    function changeButtonStyle(clickedId) {
+        // 모든 버튼 요소를 선택합니다.
+        const buttons = document.querySelectorAll('nav a');
+        // 각 버튼에 대해 스타일을 변경합니다.
+        buttons.forEach(button => {
+            // 기존 스타일 클래스를 제거합니다.
+            button.classList.remove('border-indigo-500', 'text-indigo-600');
+            // 새로운 스타일 클래스를 추가합니다.
+            button.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+        });
+        // 클릭된 버튼의 요소를 가져옵니다.
+        const clickedButton = document.getElementById(clickedId);
+        // 클릭된 버튼에 새로운 스타일 클래스를 추가하고, 기존 스타일 클래스를 제거합니다.
+        clickedButton.classList.add('border-indigo-500', 'text-indigo-600');
+        clickedButton.classList.remove('border-transparent', 'text-gray-500');
+    }
+</script>
+</html>

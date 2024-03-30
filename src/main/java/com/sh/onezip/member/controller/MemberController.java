@@ -284,6 +284,7 @@ public class MemberController {
         Member member = memberDetails.getMember();
         businessAllDto.setMember(member);
 
+
 //        // 사업자 고유번호 수정되지 않도록 처리
 //        BusinessAllDto bizId = businessService.findByBId(businessAllDto.getId());
 //        // 사업자 등록 번호는 그대로 유지 해야 하므로 작성

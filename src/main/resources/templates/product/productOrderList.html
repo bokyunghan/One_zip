@@ -5,6 +5,24 @@
         layout:decorate="~{layout/default}">
 <head>
     <title>회원 상품 주문 내역</title>
+	<script>
+		// function refund() {
+		// 	$.ajax({
+		// 		url: "https://api.iamport.kr/payments/cancel",
+		// 		method: "post",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 			"Authorization": access_token // 포트원 서버로부터 발급받은 엑세스 토큰
+		// 		},
+		// 		data: {
+		// 			reason, // 고객사 클라이언트로부터 받은 환불사유
+		// 			imp_uid, // imp_uid를 환불 `unique key`로 입력
+		// 			amount: cancel_request_amount, // 고객사 클라이언트로부터 받은 환불금액
+		// 			checksum: cancelableAmount // [권장] 환불 가능 금액 입력
+		// 		}
+		// 	});
+		// }
+	</script>
 </head>
 <style layout:fragment="style"></style>
 
@@ -22,19 +40,27 @@
 					<th class="px-4 py-2">옵션 금액</th>
 					<th class="px-4 py-2">주문 수량</th>
 					<th class="px-4 py-2">결제 금액</th>
+					<th class="px-4 py-2">환불 요청</th>
 				</tr>
 				</thead>
 				<tbody class="divide-y divide-gray-300">
 				<tr th:each="order, status : ${orders}" th:data-product-id="${order.id}" class="hover:bg-gray-50">
-					<td class="border px-4 py-2" th:text="${order.productLog.purchaseDate}"></td>
+					<td class="border px-4 py-2" th:id="${status.index}" th:text="${order.productLog.purchaseDate}"></td>
 					<td class="border px-4 py-2" th:text="${order.product.productName}"></td>
 					<td class="border px-4 py-2" th:text="${order.productOption.optionName}"></td>
 					<td class="border px-4 py-2" th:text="${order.productOption.optionCost}"></td>
 					<td class="border px-4 py-2" th:text="${order.purchaseQuantity}"></td>
-					<td class="border px-4 py-2 text-purple-600" th:text="|${order.payAmount}원|"></td>
+					<td class="border px-4 py-2 text-purple-600" th:value="${order.payAmount}" th:text="|${order.payAmount}원|"></td>
+					<td>
+						<button class="refundBtn" onclick="refund()">환불 요청 버튼</button>
+					</td>
+					<td>
+						<input type="hidden" th:value="${order.productLog.id}" th:id="${order.status}">
+					</td>
 				</tr>
 				</tbody>
 			</table>
+
 		</div>
 		<div id="pagebar" class="mt-4">
 			<nav aria-label="Page navigation example">
@@ -48,4 +74,5 @@
 </div>
 
 <script layout:fragment="script"></script>
+<script layout:fragment="script" th:src="@{/js/product/productOrderList.js}"></script>
 </html>

@@ -8,7 +8,7 @@ import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.dto.ProductPurchaseInfoDto;
-import com.sh.onezip.product.dto.useProductPurchaseInfoDto;
+import com.sh.onezip.product.dto.UseProductPurchaseInfoDto;
 import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productoption.entity.ProductOption;
 import com.sh.onezip.product.service.ProductService;
@@ -84,7 +84,7 @@ public class ProductController {
     @PostMapping("/productPurchaseInfo.do")
     public void productPurchaseInfo(
             @AuthenticationPrincipal MemberDetails memberDetails,
-            @Valid useProductPurchaseInfoDto useProductPurchaseInfoDto,
+            @Valid UseProductPurchaseInfoDto useProductPurchaseInfoDto,
             Model model){
         Member member = memberDetails.getMember();
         List<ProductOption> productOptions = productOptionService.findAllByProductId(useProductPurchaseInfoDto.getProductId());

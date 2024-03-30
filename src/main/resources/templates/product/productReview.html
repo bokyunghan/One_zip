@@ -15,7 +15,7 @@
 			<tr th:each="review, status: ${reviews}" style="border: 1px solid #e2e8f0; border-radius: 0.25rem; margin-bottom: 10px;">
 				<td class="py-4">
 					<div>
-						<span th:text="${review.memberId}" class="font-bold"></span>
+						<span th:text="${review.member.memberId}" class="font-bold"></span>
 						<span th:text="${review.reviewRegdate}" class="text-gray-500"></span>
 					</div>
 					<div class="text-yellow-500">
@@ -25,10 +25,10 @@
 					<div>
 						<span th:text="${review.reviewContent}" class="block mb-2"></span>
 					</div>
-					<div th:if="${review.memberId == member.memberId}" class="text-right">
+					<div th:if="${review.member.memberId == member.memberId}" class="text-right">
 						<form th:action="@{/product/reviewfurcate.do}" method="post">
 							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-							<input type="hidden" th:name="reviewerId" th:value="${review.memberId}"/>
+							<input type="hidden" th:name="reviewerId" th:value="${review.member.memberId}"/>
 							<input type="hidden" th:name="reviewId" th:value="${review.id}"/>
 							<input type="hidden" th:name="productId" th:value="${productId}"/>
 							<button type="submit" name="action" value="update" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">수정</button>
