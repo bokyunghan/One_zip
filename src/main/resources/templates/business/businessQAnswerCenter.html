@@ -1,0 +1,95 @@
+<!--<!DOCTYPE html>-->
+<!--<html-->
+<!--        xmlns:th="http://www.thymeleaf.org"-->
+<!--        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--        layout:decorate="~{layout/default}">-->
+<!--<head>-->
+<!--    <title></title>-->
+<!--</head>-->
+<!--<style layout:fragment="style"></style>-->
+
+<!--<h1>문의 상세 페이지</h1>-->
+<!--<div layout:fragment="content" class="mx-12 mt-12 px-4 sm:px-6 lg:px-8">-->
+<!--&lt;!&ndash;    <input type="hidden" name="id" th:value="${product.id}">&ndash;&gt;-->
+<!--    <div class="home-container">-->
+<!--        <div class="title-box flex justify-center">-->
+<!--         <span class="border-b-2 border-gray-400 font-semibold pb-2 pt-16 text-3xl">-->
+<!--             ONE_ZIP 질답게시판 입니다 무엇이든 물어보세요 🤗-->
+<!--         </span>-->
+<!--        </div>-->
+<!--        <p class="px-3 py-3.5 text-center text-lg font-semibold text-gray-900">-->
+<!--            안녕하세요 <span th:text="${pquestion.member.name}"> </span> 회원님 원집(ONE_ZIP🏠) 상품 판매자 입니다. 반갑습니다~-->
+<!--            <br>상품 문의글 같은 경우 작성일자 기준으로 1~2일 안으로 답변드리고 있습니다.<br>-->
+<!--            보다 정확한 답변을 전달해드리기 위해 항상 노력하겠습니다. 감사합니다 💕</p>-->
+<!--        &lt;!&ndash; table박스 &ndash;&gt;-->
+<!--        <div class="container flex justify-center mt-4">-->
+<!--            <img th:src="@{/images/question.png}" width="450px">-->
+<!--            <table>-->
+<!--                <thead class="text-lg">-->
+<!--                <tr>-->
+<!--                    <th class="px-4">문의고유번호</th>-->
+<!--                    <th class="px-4">회원아이디</th>-->
+<!--                    <th class="px-4">회원권한</th>-->
+<!--                    <th class="px-4">답변여부</th>-->
+<!--                    <th class="px-4">문의날짜</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody class="text-lg">-->
+<!--                <tr>-->
+<!--                    &lt;!&ndash;  answer 객체가 null이 아니고, 그 안에 있는 questionCenter 속성이 null이 아닐 때 &ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <input type="hidden" name="id" th:if="${answer != null && answer.questionCenter != null}" th:value="${answer.questionCenter.id}">&ndash;&gt;-->
+<!--                    <td class="px-4 text-center" th:text="${pquestion.id}">-</td>-->
+<!--                    <td class="px-4 text-center" th:text="${pquestion.member.memberId}">-</td>-->
+<!--                    <td class="px-4 text-center" th:each="authority : ${pquestion.member.authorities}" th:text="${authority.userType}">-</td>-->
+<!--                    <td class="px-4">-->
+<!--                        <div class="text-center" th:text="${question.answerYn == null ? 'N' : question.answerYn}">-</div>-->
+<!--                    </td>-->
+<!--                    <td class="px-4" th:text="${pquestion.qRegdate}">-</td>-->
+<!--                </tr>-->
+<!--                <tr style="height: 20px;"></tr> &lt;!&ndash; 여기서 간격 조절 &ndash;&gt;-->
+<!--                <tr>-->
+<!--                    &lt;!&ndash; 줄바꿈 문자를 <br/>로 치환 &ndash;&gt;-->
+<!--                    <td colspan="5" class="px-4 py-2 text-center border border-gray-300 text-xl" style="max-width: 200px; word-wrap: break-word; white-space: pre-line;"-->
+<!--                        th:utext="${#strings.replace(pquestion.qContent, '\n', '<br/>')}"></td>-->
+
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--        <a th:href="@{/business/businessQAnswerCenter.do}" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">이전페이지로 돌아가기</a>-->
+<!--    </div>-->
+<!--    <div class="mt-8">-->
+<!--        <form th:action="@{/business/businessQAnswerCenter.do}" method="post">-->
+<!--            <input type="hidden" name="id" th:value="${pquestion.id}">-->
+<!--            <div class="title-box flex justify-center mb-4">-->
+<!--            <span class="border-b-2 border-gray-400 font-semibold pb-2 pt-16 text-3xl">-->
+<!--                ONE_ZIP 문의글 답변 🤗-->
+<!--            </span>-->
+<!--            </div>-->
+<!--            <div class="mt-4" th:if="${answer != null}">-->
+<!--                <p class="text-center text-lg font-semibold text-gray-900">-->
+<!--                    해당 답변은 adminking(관리자)님이 답변하였습니다.-->
+<!--                </p>-->
+<!--                <p class="text-center text-lg font-semibold text-gray-900">-->
+<!--                    답변 고유번호는 <span class="text-center" th:text="${answer.id}">-</span>번입니다.-->
+<!--                </p>-->
+<!--                <p class="text-center text-lg font-semibold text-gray-900">-->
+<!--                    ✔️ 수정을 완료하려면 답변 수정을 마치신 후 '답변 수정 버튼'을 클릭해주세요!-->
+<!--                </p><br><br>-->
+<!--            </div>-->
+<!--            <div class="mb-8 flex justify-center items-center text-lg">-->
+<!--                <input type="text" rows="6" style="font-size: 18px; width: 50%;" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" placeholder="답변해주세요!" name="aoneContent" id="aoneContent" th:value="${pquestion.answerCenter != null ? pquestion.productAnswer.aContent : ''}"required>-->
+<!--                &lt;!&ndash; 등록된 답변이 있을 경우 답변하기 버튼 숨김 &ndash;&gt;-->
+<!--                <button type="submit" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" th:if="${pquestion.productAnswer == null}">답변 등록</button>-->
+
+<!--                &lt;!&ndash; 수정 버튼 &ndash;&gt;-->
+<!--                <button type="button" class="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-700 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" th:if="${pquestion.productAnswer != null}" onclick="openEditModal()">답변 수정</button>-->
+
+
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
+<!--<script layout:fragment="script" th:src="@{/js/admin/customerACenterDetailList.js}">-->
+<!--</script>-->
+<!--</html>-->

@@ -1,6 +1,5 @@
 package com.sh.onezip.productquestion.service;
 
-import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productquestion.dto.ProductQuestionCreateDto;
 import com.sh.onezip.productquestion.dto.ProductQuestionDto;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
@@ -9,12 +8,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
+@Transactional
 @Service
 public class ProductQuestionService {
     @Autowired
@@ -49,7 +49,7 @@ public class ProductQuestionService {
         productQuestionRepository.save(productQuestion);
     }
 
-    public ProductQuestion findQuestuinById(Long questionId) {
+    public ProductQuestion findQuestionById(Long questionId) {
         ProductQuestion productQuestion = productQuestionRepository.findById(questionId).orElse(null);
         return productQuestion;
     }
@@ -58,10 +58,15 @@ public class ProductQuestionService {
         productQuestionRepository.deleteById(questionId);
     }
 
+    public ProductQuestion findByPQId(Long id) {
+        return productQuestionRepository.findByPQId(id);
+    }
+
+
     // HBK start
 
-
-
-
+//    public Optional<ProductQuestion> findByProductQId(Long id) {
+//        return productQuestionRepository.findById(id);
+//    }
 
 }

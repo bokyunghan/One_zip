@@ -6,9 +6,6 @@
 <head>
 </head>
 <style layout:fragment="style">
-    div[data-product-id] {
-        cursor: pointer;
-    }
 </style>
 <div layout:fragment="content">
 <!-- nav start  -->
@@ -34,7 +31,7 @@
     <!-- nav end  -->
     <h2 class="text-2xl font-bold tracking-tight text-gray-900 text-center">고객문의내역 (Customer questions)</h2><br>
     <p class="text-lg font-semibold text-gray-800 text-center">총 [[${totalCount}]]건의 상품 질문이 조회되었습니다.</p>
-    <div th:each="pquestion, status : ${pquestion}"  th:data-product-id="${pquestion.id}" class="group relative mt-12">
+    <div th:each="pquestion, status : ${pquestion}"  class="group relative mt-12">
         <!-- 값이 없을 때도 나오도록 -->
         <div class="grid justify-items-center m-11 mx-64">
             <ul role="list" class="divide-y divide-gray-100">
@@ -43,8 +40,9 @@
                         <!-- 이미지 S3로 get 해야함 -->
                         <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">
                         <div class="min-w-0 flex-auto">
-                            <p class="text-base font-semibold leading-5 text-gray-900" th:text="|질문작성자 : ${pquestion.member.name}|"></p>
+                            <p class="text-base font-semibold leading-5 text-gray-900" th:text="|질문작성자 : ${pquestion.member.name} (P-${pquestion.id})|"></p>
                             <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|이메일 : ${pquestion.member.email}|"></p>
+<!--                            <a th:href="@{/business/businessQAnswerCenter.do(id=${product.id}, qid=${pquestion.id})}" class="text-sm text-gray-700">Answer Center로 이동</a>-->
                         </div>
                     </div>
                     <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
@@ -57,11 +55,30 @@
                         <div th:if="${pquestion.productAnswer == null}">답변 대기중</div>
                         <p class="mt-1 text-xxs leading-4 text-gray-500" th:text="|작성일자 : ${pquestion.qRegdate}|"></p>
                     </div>
-                </li>
+                </li><br>
+                <!-- max-width: 280px 너비 늘리기 ${#strings.replace(pquestion.qContent, '\n', '<br/>')} 쓰면 줄바꿈 처리 됨-->
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" style="max-width: 460px; word-wrap: break-word; white-space: pre-line;"
+                   th:utext="|문의 내용 : ${#strings.replace(pquestion.qContent, '\n', '<br/>')}|"></p><br>
+                <!--   답글 입력   -->
+                <div class="flex items-start gap-2.5 comment-form-container">
+                    <form th:action="@{/business/businessQnACenter.do(id=${pquestion.id})}" method="post" class="w-full">
+                        <div class="flex items-center space-x-2 rtl:space-x-reverse mb-2">
+                            <input type="hidden" name="id" th:value="${pquestion.id}" />
+                            <input type="text" rows="6" style="font-size: 15px; width: 50%;" class="flex-grow form-control rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200" placeholder="답변해주세요!" name="aContent" id="aContent" th:value="${pquestion.productAnswer != null ? pquestion.productAnswer.aContent : ''}"required>
+                        </div>
+                        <div class="flex items-center justify-end px-3 py-2 border-t">
+                            <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800"  th:if="${pquestion.productAnswer == null}">
+                                댓글 등록
+                            </button>
+                            <!-- 수정 버튼 -->
+                            <button type="submit" class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 hover:bg-blue-800" th:if="${pquestion.productAnswer != null}" >답변 수정</button>
+                        </div>
+                    </form>
+                </div>
             </ul>
         </div>
     </div>
-    
+
     <div class="pagination" style="text-align: center;">
         <ul class="pagination-list" style="display: flex; justify-content: center;">
             <!-- 이전 페이지 링크 -->

@@ -24,4 +24,8 @@ public class ProductAnswerService {
     public Optional<ProductAnswer> findById(Long id) {
         return productAnswerRepository.findById(id);
     }
+
+    public ProductAnswer createPAnswer(ProductAnswer productAnswer) {
+        return productAnswerRepository.save(productAnswer);
+    }
 }

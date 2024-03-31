@@ -178,7 +178,7 @@ public class BusinessController {
         }
     }
     @GetMapping("/businessQnACenter.do")
-    public void businessQnACenter(@PageableDefault(size = 5, page = 0) Pageable pageable, @RequestParam Long id, Model model){
+    public void businessQnACenter(@PageableDefault(size = 2, page = 0) Pageable pageable, @RequestParam Long id, Model model){
         // 상품고유번호, 질문작성자, 답변 고유번호 가져오기(답변없으면 고유번호 X null 대기중/ 답변 O 고유번호 O 답변완료)
         // 상품고유번호 불러오기
         Product product = productService.findById(id);
@@ -191,6 +191,30 @@ public class BusinessController {
         model.addAttribute("number", productQuestionPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productQuestionPage.getTotalPages()); // 전체 페이지 수
     }
+
+    @PostMapping("/businessQnACenter.do")
+    public String businessQnACenter(@RequestParam Long id,
+                                    @RequestParam String aContent,
+                                    RedirectAttributes redirectAttributes){
+        // 질문 고유번호 가져오기
+        ProductQuestion productQuestion = productQuestionService.findQuestionById(id);
+        log.debug("productQuestion ={}",productQuestion);
+
+        // 답변 객체 생성
+        ProductAnswer productAnswer = new ProductAnswer();
+        // 답변 내용 설정
+        productAnswer.setAContent(aContent);
+        productAnswer.setMember(productQuestion.getMember());
+        // 답변 내용 해당 질문 문의글에 설정
+        productAnswer.setProductQuestion(productQuestion);
+        log.debug("productAnswer ={}", productAnswer);
+        // 답변 등록
+        productAnswerService.createPAnswer(productAnswer);
+        // 리다이렉트 후 메시지 전달
+        redirectAttributes.addFlashAttribute("msg", "🎈🎈🎈 답변등록이 완료되었습니다. 🎈🎈🎈");
+        return "redirect:/business/businessQnACenter.do?id=" + productQuestion.getProduct().getId();
+    }
+
     @GetMapping("/businessAllReview.do")
     public void businessAllReview(@PageableDefault(size = 5, page = 0) Pageable pageable, @RequestParam Long id, Model model){
         // 상품고유번호 불러오기
@@ -203,7 +227,6 @@ public class BusinessController {
         model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
     }
-
 }
 //    @GetMapping("/businessQnACenter.do")
 //    public void businessQnACenter(@AuthenticationPrincipal MemberDetails memberDetails,

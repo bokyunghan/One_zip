@@ -38,7 +38,7 @@ public class ProductQuestion implements Comparable<ProductQuestion> {
     @CreationTimestamp
     @Column(name = "q_regdate")
     private LocalDate qRegdate;
-    @OneToOne(mappedBy = "productQuestion")
+    @OneToOne(mappedBy = "productQuestion", fetch = FetchType.LAZY)
     private ProductAnswer productAnswer;
 
     @Override

@@ -70,7 +70,9 @@
                         <div class="min-w-0 flex-auto">
                             <p class="text-base font-semibold leading-5 text-gray-900" th:text="|리뷰작성자 : ${preview.member.name}|"></p>
                             <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|이메일 : ${preview.member.email}|"></p>
-                            <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|리뷰내용 : ${preview.reviewContent}|" style="white-space: pre-wrap;"></p>
+                            <p class="mt-1 truncate text-xxs leading-4 text-gray-500" style="max-width: 500px; word-wrap: break-word; white-space: pre-line;"
+                               th:utext="|문의 내용 : ${#strings.replace(preview.reviewContent, '\n', '<br/>')}|"></p>
+<!--                            <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|리뷰내용 : ${preview.reviewContent}|" style="white-space: pre-wrap;"></p>-->
 <!--                            <p class="mt-1 text-xxs leading-4 text-gray-500" th:text="|리뷰내용 : ${preview.reviewContent}|" id="reviewContent" style="word-wrap: break-word;"></p>-->
                         </div>
                     </div>
