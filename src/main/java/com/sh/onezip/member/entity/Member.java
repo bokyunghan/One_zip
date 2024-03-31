@@ -31,7 +31,7 @@ import java.util.List;
 
 // HBK write Tostring / reason : Member Authority ,QuestionCenter, AnswerCenter stackoverflow
 
-@ToString(exclude = {"authorities", "questionCenters", "answerCenters"})
+@ToString(exclude = {"authorities", "questionCenters", "answerCenters", "productQuestions"})
 @Table(name = "tb_member")
 public class Member {
 

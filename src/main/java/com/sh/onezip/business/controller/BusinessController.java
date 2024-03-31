@@ -21,6 +21,8 @@ import com.sh.onezip.productanswer.service.ProductAnswerService;
 import com.sh.onezip.productquestion.dto.ProductQuestionDto;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
 import com.sh.onezip.productquestion.service.ProductQuestionService;
+import com.sh.onezip.productreview.dto.ProductReviewDto;
+import com.sh.onezip.productreview.service.ProductReviewService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +63,8 @@ public class BusinessController {
     ProductQuestionService productQuestionService;
     @Autowired
     ProductAnswerService productAnswerService;
+    @Autowired
+    ProductReviewService productReviewService;
 
     @GetMapping("/productList.do")
     public void productList(@AuthenticationPrincipal MemberDetails memberDetails, @PageableDefault(size = 6, page = 0) Pageable pageable, Model model) {
@@ -122,6 +126,7 @@ public class BusinessController {
         // 회원 정보 설정
         Member member = memberDetails.getMember();
         productDetailDto.setMemberId(member.getId());
+
         // DB 저장(사업자 상품 등록, 첨부파일)
         productService.createProductBiz(productDetailDto);
 
@@ -185,6 +190,18 @@ public class BusinessController {
         model.addAttribute("size", productQuestionPage.getSize()); // 페이지당 표시되는 상품 수
         model.addAttribute("number", productQuestionPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productQuestionPage.getTotalPages()); // 전체 페이지 수
+    }
+    @GetMapping("/businessAllReview.do")
+    public void businessAllReview(@PageableDefault(size = 5, page = 0) Pageable pageable, @RequestParam Long id, Model model){
+        // 상품고유번호 불러오기
+        Product product = productService.findById(id);
+        Page<ProductReviewDto> productReviewDtoPage = productReviewService.productReviewFindAllByProductId(pageable, product.getId());
+        model.addAttribute("product", product); // 상품 고유번호
+        model.addAttribute("preview", productReviewDtoPage); // 상품에 대한 질문 목록
+        model.addAttribute("totalCount", productReviewDtoPage.getTotalElements()); // 총 질문 수
+        model.addAttribute("size", productReviewDtoPage.getSize()); // 페이지당 표시되는 상품 수
+        model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
+        model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
     }
 
 }

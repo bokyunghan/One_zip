@@ -13,7 +13,7 @@ public interface ProductReviewRepository extends JpaRepository<ProductReview, Lo
 
     @Query("from ProductReview pr where pr.product.id = :id")
     List<ProductReview> productReviewFindByProductid(Long id);
-    @Query("from ProductReview pr where pr.product.id = :productId order by pr.id desc")
+    @Query("from ProductReview pr where pr.product.id = :productId order by pr.id asc")
     Page<ProductReview> productReviewFindAllByProductId(Pageable pageable, Long productId);
 
     @Query("from ProductReview pr where pr.product.id = :productId")

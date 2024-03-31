@@ -32,13 +32,16 @@
         </div>
 </div>
     <!-- nav end  -->
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 text-center">고객문의내역 (Customer questions)</h2><br>
     <p class="text-lg font-semibold text-gray-800 text-center">총 [[${totalCount}]]건의 상품 질문이 조회되었습니다.</p>
     <div th:each="pquestion, status : ${pquestion}"  th:data-product-id="${pquestion.id}" class="group relative mt-12">
+        <!-- 값이 없을 때도 나오도록 -->
         <div class="grid justify-items-center m-11 mx-64">
             <ul role="list" class="divide-y divide-gray-100">
                 <li class="flex justify-between gap-x-6 py-3">
                     <div class="flex min-w-0 gap-x-4">
-                        <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""> <!-- 이미지 크기를 h-12, w-12에서 h-10, w-10으로 수정 -->
+                        <!-- 이미지 S3로 get 해야함 -->
+                        <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">
                         <div class="min-w-0 flex-auto">
                             <p class="text-base font-semibold leading-5 text-gray-900" th:text="|질문작성자 : ${pquestion.member.name}|"></p>
                             <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|이메일 : ${pquestion.member.email}|"></p>
@@ -57,7 +60,23 @@
                 </li>
             </ul>
         </div>
-
+    </div>
+    
+    <div class="pagination" style="text-align: center;">
+        <ul class="pagination-list" style="display: flex; justify-content: center;">
+            <!-- 이전 페이지 링크 -->
+            <li th:if="${number > 0}">
+                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number - 1}, size=${size})}" class="pagination-link"> 이전페이지로 이동하기 </a>
+            </li>
+            <!-- 페이지 번호 링크 -->
+            <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNumber == number ? 'active' : ''}" class="pagination-item" style="margin: 0 5px;">
+                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${pageNumber}, size=${size})}" th:text="${pageNumber + 1}" class="pagination-link" style="font-size: 16px;"></a>
+            </li>
+            <!-- 다음 페이지 링크 -->
+            <li th:if="${number + 1 < totalPages}">
+                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number + 1}, size=${size})}" class="pagination-link"> 다음페이지로 이동하기 </a>
+            </li>
+        </ul>
     </div>
 <script layout:fragment="script">
     // 페이지가 로드될 때 실행될 함수입니다.
@@ -100,5 +119,6 @@
         clickedButton.classList.add('border-indigo-500', 'text-indigo-600');
         clickedButton.classList.remove('border-transparent', 'text-gray-500');
     }
+
 </script>
 </html>

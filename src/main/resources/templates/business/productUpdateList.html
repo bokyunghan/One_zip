@@ -32,7 +32,7 @@
         </div>
 </div>
     <!-- nav end  -->
-
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 text-center">상품상세페이지 (Product detail page)</h2><br>
     <form name="memberCreateFrm" th:action="@{/business/productUpdateList.do}" method="POST" style="margin-right: 30rem; margin-top: -80px;" class="mt-3 max-w-xl sm:mt-3 w-5/12 ml-auto" enctype="multipart/form-data">
     <div th:if="${product}">
            <input type="hidden" id="id" name="id" th:value="${product.member.id}">
