@@ -18,10 +18,13 @@ public class ProductPurchaseInfoDto {
     private int totalDiscountPrice;
     private int totalOptionCost;
 
+    private int SellPrice;
     private List<ProductOption> productOptionLists;
     private ProductOption productOption;
     private int additionalCost;
     private Long optionId;
-    private int sellPrice;
+    private Long productLogId;
+    private int totalApplyPrice;
     private Member member;
+
 }

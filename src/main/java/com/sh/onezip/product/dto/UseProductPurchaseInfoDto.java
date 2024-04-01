@@ -5,7 +5,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
-public class useProductPurchaseInfoDto {
+public class UseProductPurchaseInfoDto {
 
     @PositiveOrZero
     Long productId;

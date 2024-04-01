@@ -74,6 +74,9 @@ public class MemberService {
         return memberRepository.findByMId(id);
     }
 
+//    public Member findByPId(Long id) {
+//        return memberRepository.findByPId(id);
+//    }
 
 
     // HBK end

@@ -2,6 +2,8 @@ package com.sh.onezip.product.dto;
 
 import com.sh.onezip.attachment.dto.AttachmentCreateDto;
 import com.sh.onezip.attachment.entity.Attachment;
+import com.sh.onezip.member.entity.Member;
+import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.product.entity.ProductType;
 import com.sh.onezip.productoption.dto.ProductOptionDto;
 import com.sh.onezip.productoption.entity.ProductOption;
@@ -13,7 +15,8 @@ import java.util.List;
 
 @Data
 public class ProductDetailDto {
-
+    // 사업자 상품 수정 용
+    private Member member;
     private Long id;
     private String productName;
     private String businessmember;
@@ -34,4 +37,5 @@ public class ProductDetailDto {
     public void addAttachmentCreateDto(AttachmentCreateDto attachmentCreateDto) {
         this.attachments.add(attachmentCreateDto);
     }
+    private Product product;
 }

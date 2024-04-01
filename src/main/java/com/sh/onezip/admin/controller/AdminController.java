@@ -302,7 +302,6 @@ public class AdminController {
     @PostMapping("/customerACenterUpdateList.do")
     public String customerACenterUpdateList(@RequestParam Long id,
                                             @RequestParam String newAoneContent,
-                                            @RequestParam Long memberId, // 회원 ID 파라미터 추가(회원고유번호)
                                             RedirectAttributes redirectAttributes) {
 
         // 답변 고유번호로 기존 답변을 찾음
@@ -313,12 +312,6 @@ public class AdminController {
             // Optional에서 값 가져오기
             AnswerCenter newAnswer = answerCenter.get();
             newAnswer.setAoneContent(newAoneContent);
-
-//            // 회원 ID에 해당하는 회원 객체 가져오기
-//            Member member = memberService.findByAOneMemberId(memberId);
-
-            // 가져온 회원 객체를 답변에 설정
-//            newAnswer.setMember(member);
             answerCenterService.updateAnswerCenter(newAnswer);
         } else {
             // 에러 페이지로 이동 (해당 답변을 찾지 못한 경우 또는 멤버를 찾지 못한 경우)
@@ -337,5 +330,16 @@ public class AdminController {
 }
 
 
-
-
+//    @PostMapping("/boardUpdate.do")
+//    public String update(BoardUpdateDto boardUpdateDto,
+//                         Model model,
+//                         @RequestParam("id") Long id,
+//                         RedirectAttributes redirectAttributes) {
+//        log.debug("boardUpdateDto = {}" , boardUpdateDto);
+//        BoardUpdateDto boardUpdateDto1  = boardService.update(boardUpdateDto);
+//        model.addAttribute("boardUpdateDto", boardUpdateDto1);
+//
+//        redirectAttributes.addFlashAttribute("msg", "게시글 수정이 완료되었습니다");
+//
+//        return "redirect:/board/boardDetail.do?id=" + id;
+//    }

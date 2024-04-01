@@ -20,7 +20,7 @@
 				<br>
 				<p class="text-base text-gray-600 mr-4" th:text="|할인 전: ${product.productPrice}원|" style="text-decoration:line-through;"></p>
 				<input id="product-id" name="productId" type="hidden" th:value='${product.id}'>
-				<p class="text-red-500 font-bold mb-4">할인 후: <span id="product-sellPrice" th:text="${product.sellPrice}"></span>원</p>
+				<p class="text-red-500 font-bold mb-4">할인 후: <span id="product-applyPrice" th:text="${product.applyPrice}"></span>원</p>
 			</div>
 
 			<div th:if="!${#lists.isEmpty(product.productOptions)}" class="mb-4">
@@ -42,7 +42,7 @@
 
 			<div class="flex items-center justify-center mb-4">
 				<span class="mr-2 text-red-500 font-bold">최종 가격:</span>
-				<input id="product-totalPrice" name="totalPrice" type="number" th:value="${product.sellPrice}" style="width: 100px; border: none; outline: none; text-align: center; color: red;" disabled readonly>
+				<input id="product-totalPrice" name="totalPrice" type="number" th:value="${product.applyPrice}" style="width: 100px; border: none; outline: none; text-align: center; color: red;" disabled readonly>
 				<span class="ml-2 text-red-500 font-bold">원</span>
 			</div>
 

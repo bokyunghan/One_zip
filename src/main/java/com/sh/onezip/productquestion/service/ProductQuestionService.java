@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
+@Transactional
 @Service
 public class ProductQuestionService {
     @Autowired
@@ -46,4 +48,25 @@ public class ProductQuestionService {
         ProductQuestion productQuestion = modelMapper.map(productQuestionCreateDto, ProductQuestion.class);
         productQuestionRepository.save(productQuestion);
     }
+
+    public ProductQuestion findQuestionById(Long questionId) {
+        ProductQuestion productQuestion = productQuestionRepository.findById(questionId).orElse(null);
+        return productQuestion;
+    }
+
+    public void deleteQuestionById(Long questionId) {
+        productQuestionRepository.deleteById(questionId);
+    }
+
+    public ProductQuestion findByPQId(Long id) {
+        return productQuestionRepository.findByPQId(id);
+    }
+
+
+    // HBK start
+
+//    public Optional<ProductQuestion> findByProductQId(Long id) {
+//        return productQuestionRepository.findById(id);
+//    }
+
 }

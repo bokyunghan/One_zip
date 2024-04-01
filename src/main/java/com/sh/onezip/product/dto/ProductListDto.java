@@ -1,6 +1,9 @@
 package com.sh.onezip.product.dto;
 
+import com.sh.onezip.attachment.dto.AttachmentCreateDto;
 import com.sh.onezip.attachment.entity.Attachment;
+import com.sh.onezip.member.entity.Member;
+import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.product.entity.ProductType;
 import lombok.Data;
 
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Data
 public class ProductListDto {
+    private Member member;
     private Long id;
     private String productName;
     // 사업자 전용 때 필요함 productPrice, discountRate
@@ -24,4 +28,10 @@ public class ProductListDto {
     private int originalPrice;
     private LocalDate regDate;
     List<Attachment> attachmentList = new ArrayList<>();
+
+    // 사업자 상품 수정 용
+    private List<AttachmentCreateDto> attachments = new ArrayList<>(); // 사업자 상품 수정 용
+    public void addAttachmentCreateDto(AttachmentCreateDto attachmentCreateDto) {
+        this.attachments.add(attachmentCreateDto);
+    }
 }
