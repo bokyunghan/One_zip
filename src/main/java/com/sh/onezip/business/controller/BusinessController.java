@@ -126,6 +126,8 @@ public class BusinessController {
         // 회원 정보 설정
         Member member = memberDetails.getMember();
         productDetailDto.setMemberId(member.getId());
+ //       productDetailDto.setMember(member);
+
 
         // DB 저장(사업자 상품 등록, 첨부파일)
         productService.createProductBiz(productDetailDto);

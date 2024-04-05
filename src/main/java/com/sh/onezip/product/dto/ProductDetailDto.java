@@ -38,4 +38,5 @@ public class ProductDetailDto {
         this.attachments.add(attachmentCreateDto);
     }
     private Product product;
+
 }
