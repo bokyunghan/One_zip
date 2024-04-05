@@ -36,7 +36,6 @@ public class MemberService {
     }
 
 
-
     public Member createMember(Member member, Address address) {
         Member savedMember = memberRepository.save(member);  // 먼저 tb_member 테이블에 저장
         Authority authority = Authority.builder()
@@ -44,7 +43,6 @@ public class MemberService {
                 .userType(RoleAuth.ROLE_USER)
                 .build();
         authorityService.createAuthority(authority);  // tb_authority 테이블에 저장
-
 
         address.setMember(savedMember);
 
@@ -64,11 +62,9 @@ public class MemberService {
         return memberRepository.findAllMembers(pageable);
     }
 
-
     public void deleteById(Long id) {
         memberRepository.deleteById(id);
     }
-
 
     public Member findById(Long id) {
         return memberRepository.findByMId(id);

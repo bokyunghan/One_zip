@@ -1,11 +1,13 @@
 package com.sh.onezip.product.entity;
 
 import com.sh.onezip.member.entity.Member;
+import com.sh.onezip.productquestion.entity.ProductQuestion;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.CreationTimestamp;
 import com.sh.onezip.productoption.entity.ProductOption;
+import com.sh.onezip.productreview.entity.ProductReview;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -50,6 +52,10 @@ public class Product implements Comparable<Product>{
 
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductOption> productOptions = new ArrayList<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductQuestion> productQuestions = new ArrayList<>();
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductReview> productReviews = new ArrayList<>();
 
     @Override
     public int compareTo(Product other) {

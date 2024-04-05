@@ -18,6 +18,9 @@ import com.sh.onezip.member.entity.AddressType;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
 import com.sh.onezip.service.NotificationService;
+import com.sh.onezip.auth.service.AuthService;
+import com.sh.onezip.member.dto.MemberCreateDto;
+import com.sh.onezip.member.entity.Member;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +44,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Map;
 
 @Controller
@@ -70,7 +74,6 @@ public class MemberController {
     @GetMapping("/createMember.do")
     public void createMember() {
     }
-
     /**
      * 1. dto 유효성 검사
      * 2. dto -> entity
@@ -82,41 +85,13 @@ public class MemberController {
      * @return
      */
 
-//    @Transactional
-//    @PostMapping("/createMember.do")
-//    public String createMember(
-//            @Valid MemberCreateDto memberCreateDto,
-//            BindingResult bindingResult,
-//            RedirectAttributes redirectAttributes) {
-//        if(bindingResult.hasErrors()) {
-//            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
-//            log.debug("message = {}", message);
-//            throw new RuntimeException(message);
-//        }
-//        log.debug("memberCreateDto = {}", memberCreateDto);
-//
-//        Member member = memberCreateDto.toMember();
-//        String encodePassword = passwordEncoder.encode(member.getPassword());
-//        member.setPassword(encodePassword);
-////        member = memberService.createMember(member);
-//
-//        Address address = memberCreateDto.toAddress(member);
-//        address.setRecipientName(member.getName());
-//        address.setAddressType(AddressType.D);
-//
-//        System.out.println(address);
-//        member = memberService.createMember(member, address);
-//
-//        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
-//        return "redirect:/";
-//    }
     @Transactional
     @PostMapping("/createMember.do")
     public String createMember(
             @Valid MemberCreateDto memberCreateDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
-        if (bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
             String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
             log.debug("message = {}", message);
             throw new RuntimeException(message);
@@ -137,8 +112,8 @@ public class MemberController {
 
         // Member와 Address 엔터티 저장
         memberService.createMember(member, address);
-
         // 회원가입 성공 메시지를 리다이렉트 어트리뷰트에 추가
+
         redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
         return "redirect:/";
     }
@@ -193,7 +168,6 @@ public class MemberController {
 
         return "redirect:/member/memberDetail.do";
     }
-
 
     @GetMapping("/selectMemberType.do")
     public void selectMemberType() {
@@ -311,4 +285,3 @@ public ResponseEntity<?> fileDownload(@RequestParam("id") Long id, @RequestParam
     }
 }
 // HBK end
-
