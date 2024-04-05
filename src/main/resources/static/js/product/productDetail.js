@@ -16,13 +16,7 @@ document.querySelector("#minus-btn").addEventListener('click', (e) => {
 // selectElement.addEventListener('change', function() {
 if(document.querySelector("#selectOption") != null){
     document.querySelector("#selectOption").addEventListener('change', (e) => {
-        // 선택된 옵션 요소를 가져옵니다.
-        const selectedOption = e.target.options[e.target.selectedIndex];
-        const selectedOptionIndex = selectedOption.value;
-        // console.log(selectedOptionIndex);
-        //
-        // const temp = '#Seloption' + selectedOptionIndex.toString();
-        // console.log(temp)
+
         const selOptVal = e.target.value;
         const stringArr = selOptVal.split('#');
         const optionCost = stringArr[1];
@@ -32,56 +26,36 @@ if(document.querySelector("#selectOption") != null){
 
 
         const product_quantityEle = document.querySelector("#product-quantity");
-        // const product_quantity = parseInt(product_quantityEle.innerText); // innerHTML 대신 innerText 사용
         const product_quantity = parseInt(product_quantityEle.value);
 
-        const productSellPriceEle = document.querySelector('#product-sellPrice');
-        const productSellPrice = parseInt(productSellPriceEle.innerText);
-        // const productSellPrice = parseInt(productSellPriceEle.value);
-
+        const productApplyPriceEle = document.querySelector('#product-applyPrice');
+        const productApplyPrice = parseInt(productApplyPriceEle.innerText);
 
         const refOptionCostEle = document.querySelector("#refOptionCost");
         const refOptionCostPrice = parseInt(refOptionCostEle.value);
 
         const productTotalPriceEle = document.querySelector('#product-totalPrice');
-        productTotalPriceEle.value = (productSellPrice + refOptionCostPrice) * product_quantity;
-        // productTotalPriceEle.value = (productSellPrice + optionCost) * product_quantity;
+        productTotalPriceEle.value = (productApplyPrice + refOptionCostPrice) * product_quantity;
     });
 }
 
-document.querySelector("#plus-btn").addEventListener('click', (e) => {
-    e.preventDefault();
-    const product_quantityEle = document.querySelector("#product-quantity");
-    // const product_quantity = parseInt(product_quantityEle.innerText); // innerHTML 대신 innerText 사용
-    const product_quantity = parseInt(product_quantityEle.value);
+document.querySelectorAll(".quantity-btn").forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const product_quantityEle = document.querySelector("#product-quantity");
+        // const product_quantity = parseInt(product_quantityEle.innerText); // innerHTML 대신 innerText 사용
+        const product_quantity = parseInt(product_quantityEle.value);
 
-    const productSellPriceEle = document.querySelector('#product-sellPrice');
-    const productSellPrice = parseInt(productSellPriceEle.innerText);
-    // const productSellPrice = parseInt(productSellPriceEle.value);
+        const productApplyPriceEle = document.querySelector('#product-applyPrice');
+        const productApplyPrice = parseInt(productApplyPriceEle.innerText);
+        // const productSellPrice = parseInt(productSellPriceEle.value);
 
+        const refOptionCostEle = document.querySelector("#refOptionCost");
+        const refOptionCostPrice = parseInt(refOptionCostEle.value);
 
-    const refOptionCostEle = document.querySelector("#refOptionCost");
-    const refOptionCostPrice = parseInt(refOptionCostEle.value);
-
-
-    const productTotalPriceEle = document.querySelector('#product-totalPrice');
-    productTotalPriceEle.value = (productSellPrice + refOptionCostPrice) * product_quantity;
-});
-
-document.querySelector("#minus-btn").addEventListener('click', (e) => {
-    e.preventDefault();
-    const product_quantityEle = document.querySelector("#product-quantity");
-    const product_quantity = parseInt(product_quantityEle.value);
-
-    const productSellPriceEle = document.querySelector('#product-sellPrice');
-    const productSellPrice = parseInt(productSellPriceEle.innerText);
-
-    const refOptionCostEle = document.querySelector("#refOptionCost");
-    const refOptionCostPrice = parseInt(refOptionCostEle.value);
-
-
-    const productTotalPriceEle = document.querySelector('#product-totalPrice');
-    productTotalPriceEle.value = (productSellPrice + refOptionCostPrice) * product_quantity;
+        const productTotalPriceEle = document.querySelector('#product-totalPrice');
+        productTotalPriceEle.value = (productApplyPrice + refOptionCostPrice) * product_quantity;
+    });
 });
 
 document.querySelector("#product-quantity").addEventListener('input', (e) => {
@@ -92,15 +66,15 @@ document.querySelector("#product-quantity").addEventListener('input', (e) => {
     }
     const product_quantity = parseInt(product_quantityEle.value);
 
-    const productSellPriceEle = document.querySelector('#product-sellPrice');
-    const productSellPrice = parseInt(productSellPriceEle.innerText);
+    const productApplyPriceEle = document.querySelector('#product-applyPrice');
+    const productApplyPrice = parseInt(productApplyPriceEle.innerText);
 
     const productTotalPriceEle = document.querySelector('#product-totalPrice');
     if(isNaN(parseInt(product_quantityEle.value))){
-        productTotalPriceEle.value = productSellPrice;
+        productTotalPriceEle.value = productApplylPrice;
     }
     else{
-        productTotalPriceEle.value = productSellPrice * product_quantity;
+        productTotalPriceEle.value = productApplyPrice * product_quantity;
     }
 });
 
@@ -114,9 +88,7 @@ document.querySelectorAll("tr[data-product-id]").forEach((tr) => {
 });
 
 function submitForm(action) {
-    console.log(action + ' 액션 실행중');
-
-    var form = document.getElementById('myForm');
+    let form = document.getElementById('myForm');
 
     // 액션에 따라 폼의 액션을 설정합니다.
     if (action === 'purchase') {
