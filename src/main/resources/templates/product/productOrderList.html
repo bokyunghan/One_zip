@@ -52,10 +52,10 @@
 					<td class="border px-4 py-2" th:text="${order.purchaseQuantity}"></td>
 					<td class="border px-4 py-2 text-purple-600" th:value="${order.payAmount}" th:text="|${order.payAmount}원|"></td>
 					<td>
-						<button class="refundBtn" onclick="refund()">환불 요청 버튼</button>
+						<button class="refundBtn" th:value="|${order.productLog.id}/${order.payAmount}|">환불 요청 버튼</button>
 					</td>
 					<td>
-						<input type="hidden" th:value="${order.productLog.id}" th:id="${order.status}">
+						<input type="hidden" th:value="${order.productLog.id}" th:id="|${status.index}/id|">
 					</td>
 				</tr>
 				</tbody>

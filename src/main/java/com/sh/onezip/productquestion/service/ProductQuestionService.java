@@ -65,8 +65,5 @@ public class ProductQuestionService {
 
     // HBK start
 
-//    public Optional<ProductQuestion> findByProductQId(Long id) {
-//        return productQuestionRepository.findById(id);
-//    }
 
 }

@@ -27,12 +27,13 @@ public class Business {
     private Member member;
     @Column
     private String bizName;
+    @Column
+    private String bizLicense;
     @Column(unique = true)
     private String bizRegNo;
     @Column
     @Enumerated(EnumType.STRING)
     private BizAccess bizRegStatus;
 // HBK end
-
 
 }

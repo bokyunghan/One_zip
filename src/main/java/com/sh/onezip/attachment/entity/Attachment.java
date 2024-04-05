@@ -34,3 +34,4 @@ public class Attachment {
     @CreationTimestamp
     private LocalDateTime regDate;
 }
+

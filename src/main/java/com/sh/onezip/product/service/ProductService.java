@@ -36,18 +36,38 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import com.sh.onezip.productlog.entity.ProductLog;
+import com.sh.onezip.productlog.repository.ProductLogRepository;
+import com.sh.onezip.productoption.entity.ProductOption;
+import com.sh.onezip.productoption.repository.ProductOptionRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.client.RestTemplate;
+
 import java.net.URI;
 import java.util.*;
+
 @Slf4j
 @Service
 @Transactional
 public class ProductService {
 
-//    @Value("${port_one_api-key}")
-//    private String PORT_ONE_API_KEY;
-//    @Value("${port-one_api-secret-key}")
-//    private String PORT_ONE_API_SECRET_KEY;
-
+    @Value("${port_one_api-key}")
+    private String PORT_ONE_API_KEY;
+    @Value("${port-one_api-secret-key}")
+    private String PORT_ONE_API_SECRET_KEY;
 
     // variable 선언 start
 
@@ -72,7 +92,6 @@ public class ProductService {
     ProductOptionService productOptionService;
 
     ObjectMapper objectMapper = new ObjectMapper();
-
 
     // variable 선언 end
 
@@ -144,88 +163,91 @@ public class ProductService {
         return false;
     }
 
-//    public void preVerify(Map<String, String> requestData, Member member) {
-//
-//        ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
-//        Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
-//        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);;
-//        int productQuantity = Integer.parseInt(requestData.get("productQuantity"));
-//
-//        // 결제 객체 생성
-//        Payment payment = Payment
-//                .builder()
-//                .productLog(productLog)
-//                .member(member)
-//                .buyerTel(member.getPhone() == null ? "" : member.getPhone())
-//                .buyerAddr("하드코딩했습니다.")
-//                .buyerPostcode("123-456")
-//                .amount(Integer.parseInt(requestData.get("amount")))
-//                .merchantUid(requestData.get("merchant_uid"))
-//                .build();
-//
-//        int beforeApplyPrice = productOption.getOptionCost() + product.getProductPrice();
-//        int afterApplyPrice = (int)(beforeApplyPrice * (1 - (product.getDiscountRate())));
-//
-//        //주문 객체 생성
-//        OrderProduct orderProduct = OrderProduct
-//                .builder()
-//                .productLog(productLog)
-//                .product(product)
-//                .productOption(productOption)
-//                .purchaseQuantity(productQuantity)
-//                .payAmount((int)(productQuantity * afterApplyPrice)) // 단품 가격
-//                .build();
-//
-//        orderProductRepository.save(orderProduct);
-//        paymentRepository.save(payment);
-//    }
-//
-//    public void productRefund(Map<String, String> requestData) {
-//        doProductRefund(getAccessToken(), requestData);
-//    }
-//
-//    public String getAccessToken(){
-//
-//        RestTemplate restTemplate = new RestTemplate();
-//
-//
-//        // HttpHeaders 객체 생성 (header 설정)
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.set("Content-Type", "application/json");
-//
-//        Map<String, String> responseBody = new HashMap<>();
-//        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
-//        responseBody.put("imp_key", PORT_ONE_API_KEY);
-//
-//        String requestByJSON = null;
-//
-//        try {
-//            requestByJSON = objectMapper.writeValueAsString(responseBody);
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-//
-//        HttpEntity<String> httpEntity = new HttpEntity<>(requestByJSON, headers);
-//
-//        // 요청 url 가공
-//        String url = "https://api.iamport.kr/users/getToken";
-//        // 실제 요청을 보내는 코드
-//        // 모든 전송 방식 공용인 exchange()사용, put, post 방식등도 지원
-//        ResponseEntity<Map> responseEntity = restTemplate.exchange(
-//                URI.create(url),
-//                HttpMethod.POST,
-//                httpEntity,
-//                Map.class
-//        );
-//
-//        String []strArr = responseEntity.getBody().get("response").toString().split(",");
-//        String [] nextStrArrIndex = strArr[0].split("=");
-//        String accessToken = nextStrArrIndex[1];
-//
-//
-//        return accessToken;
-//
-//    }
+
+    public void preVerify(Map<String, String> requestData, Member member) {
+
+        ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
+        Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
+        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);;
+        int productQuantity = Integer.parseInt(requestData.get("productQuantity"));
+
+        // 결제 객체 생성
+        Payment payment = Payment
+                .builder()
+                .productLog(productLog)
+                .member(member)
+                .buyerTel(member.getPhone() == null ? "" : member.getPhone())
+                .buyerAddr("하드코딩했습니다.")
+                .buyerPostcode("123-456")
+                .amount(Integer.parseInt(requestData.get("amount")))
+                .merchantUid(requestData.get("merchant_uid"))
+                .build();
+
+        int afterApplyPrice = (int)(productOption.getOptionCost() + (product.getProductPrice() * (1 - product.getDiscountRate())));
+        System.out.println("afterApplyPrice: " + afterApplyPrice);
+
+
+        //주문 객체 생성
+        OrderProduct orderProduct = OrderProduct
+                .builder()
+                .productLog(productLog)
+                .product(product)
+                .productOption(productOption)
+                .purchaseQuantity(productQuantity)
+                .payAmount((productQuantity * afterApplyPrice)) // 단품 가격
+                .build();
+
+        orderProductRepository.save(orderProduct);
+        paymentRepository.save(payment);
+    }
+
+    public void productRefund(Map<String, String> requestData) {
+        String accessToken = getAccessToken();
+        doProductRefund(accessToken, requestData);
+    }
+
+    public String getAccessToken(){
+
+        RestTemplate restTemplate = new RestTemplate();
+
+
+        // HttpHeaders 객체 생성 (header 설정)
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        Map<String, String> responseBody = new HashMap<>();
+        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
+        responseBody.put("imp_key", PORT_ONE_API_KEY);
+
+        String requestByJSON = null;
+
+        try {
+            requestByJSON = objectMapper.writeValueAsString(responseBody);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        HttpEntity<String> httpEntity = new HttpEntity<>(requestByJSON, headers);
+
+        // 요청 url 가공
+        String url = "https://api.iamport.kr/users/getToken";
+        // 실제 요청을 보내는 코드
+        // 모든 전송 방식 공용인 exchange()사용, put, post 방식등도 지원
+        ResponseEntity<Map> responseEntity = restTemplate.exchange(
+                URI.create(url),
+                HttpMethod.POST,
+                httpEntity,
+                Map.class
+        );
+
+        String []strArr = responseEntity.getBody().get("response").toString().split(",");
+        String [] nextStrArrIndex = strArr[0].split("=");
+        String accessToken = nextStrArrIndex[1];
+
+
+        return accessToken;
+
+    }
 
     public void doProductRefund(String accessToken, Map<String, String> requestData){
         RestTemplate restTemplate = new RestTemplate();
@@ -234,6 +256,8 @@ public class ProductService {
         ProductLog productLog = productLogRepository.findById(productLogId).orElse(null);
         Integer amount = Integer.parseInt(requestData.get("amount"));
         Integer checksum = Integer.parseInt(requestData.get("checksum"));
+
+        System.out.println("requestData는 :" + requestData);
 
 //        if(productLog.getShppingState().toString().equals("RE")){
 //
@@ -245,10 +269,9 @@ public class ProductService {
         headers.set("Content-Type", "application/json");
         headers.set("Authorization", accessToken);
 
-        Map<String, String> responseBody = new HashMap<>();
+        Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("merchant_uid", productLogId.toString());
-        responseBody.put("amount", amount.toString());
-        responseBody.put("checksum", checksum.toString());
+        responseBody.put("amount", amount);
 
         String requestByJSON = null;
 
@@ -277,8 +300,6 @@ public class ProductService {
 
 
     }
-
-
 
     // KMJ end
 
