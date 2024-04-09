@@ -9,6 +9,7 @@ import com.sh.onezip.orderproduct.entity.OrderProduct;
 import com.sh.onezip.orderproduct.repository.OrderProductRepository;
 import com.sh.onezip.payment.entity.Payment;
 import com.sh.onezip.payment.repository.PaymentRepository;
+import com.sh.onezip.product.dto.BizProductDetailDto;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.dto.ProductPurchaseInfoDto;
@@ -313,16 +314,17 @@ public class ProductService {
     }
 
     // 사업자 상품 등록
-    public void createProductBiz(ProductDetailDto productDetailDto) {
-        Product product = productRepository.save(convertToProductDetailInsertDto(productDetailDto));
-        List<ProductOptionDto> productOptionList = productDetailDto.getProductOptionlist();
+    public void createProductBiz(BizProductDetailDto bizProductDetailDto) {
+        Product tempProduct = convertToProductDetailInsertDto(bizProductDetailDto);
+        Product product = productRepository.save(tempProduct);
+        List<ProductOptionDto> productOptionList = bizProductDetailDto.getProductOptionlist();
         if (productOptionList != null) {
             for (ProductOptionDto productOptionDto : productOptionList) {
                 productOptionDto.setProductId(product.getId());
                 productOptionService.createProductOption(productOptionDto);
             }
         }
-        productDetailDto.getAttachments().forEach(attachmentCreateDto -> {
+        bizProductDetailDto.getAttachments().forEach(attachmentCreateDto -> {
             attachmentCreateDto.setRefId(product.getId());
             attachmentCreateDto.setRefType("SP");
             attachmentService.createAttachment(attachmentCreateDto);
@@ -330,8 +332,8 @@ public class ProductService {
 
     }
 
-    private Product convertToProductDetailInsertDto(ProductDetailDto productDetailDto) {
-        Product product = modelMapper.map(productDetailDto, Product.class);
+    private Product convertToProductDetailInsertDto(BizProductDetailDto bizProductDetailDto) {
+        Product product = modelMapper.map(bizProductDetailDto, Product.class);
         return product;
     }
 

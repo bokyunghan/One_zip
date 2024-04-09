@@ -11,6 +11,7 @@ import com.sh.onezip.customerquestioncenter.entity.QuestionCenter;
 import com.sh.onezip.customerquestioncenter.service.QuestionCenterService;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
+import com.sh.onezip.product.dto.BizProductDetailDto;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.entity.Product;
@@ -103,7 +104,7 @@ public class BusinessController {
 
     @PostMapping("/productDetailList.do")
     public String productDetailList(
-            @Valid ProductDetailDto productDetailDto,
+            @Valid BizProductDetailDto bizProductDetailDto,
             BindingResult bindingResult,
             @RequestParam("upFile") List<MultipartFile> upFiles,
             @AuthenticationPrincipal MemberDetails memberDetails,
@@ -119,18 +120,17 @@ public class BusinessController {
             if (upFile.getSize() > 0) {
                 AttachmentCreateDto attachmentCreateDto = s3FileService.upload(upFile);
                 log.debug("attachmentCreateDto = {}", attachmentCreateDto);
-                productDetailDto.addAttachmentCreateDto(attachmentCreateDto);
+                bizProductDetailDto.addAttachmentCreateDto(attachmentCreateDto);
             }
         }
 
         // 회원 정보 설정
         Member member = memberDetails.getMember();
-        productDetailDto.setMemberId(member.getId());
- //       productDetailDto.setMember(member);
-
+//        bizProductDetailDto.setMemberId(member.getId());
+        bizProductDetailDto.setMember(member);
 
         // DB 저장(사업자 상품 등록, 첨부파일)
-        productService.createProductBiz(productDetailDto);
+        productService.createProductBiz(bizProductDetailDto);
 
         redirectAttributes.addFlashAttribute("msg", "상품이 등록되었습니다 🎁");
         return "redirect:/business/productList.do";
@@ -228,6 +228,12 @@ public class BusinessController {
         model.addAttribute("size", productReviewDtoPage.getSize()); // 페이지당 표시되는 상품 수
         model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
+    }
+    @GetMapping("businessPayDeliveryList.do")
+    public void businessPayDeliveryList(@RequestParam Long id, Model model){
+        // 상품고유번호 불러오기
+        Product product = productService.findById(id);
+        model.addAttribute("product", product); // 상품 고유번호
     }
 }
 //    @GetMapping("/businessQnACenter.do")
