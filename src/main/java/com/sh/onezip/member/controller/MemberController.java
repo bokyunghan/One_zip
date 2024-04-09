@@ -124,7 +124,6 @@ public class MemberController {
 
         MemberDetailDto memberDetailDto = modelMapper.map(member, MemberDetailDto.class);
 
-        System.out.println(member);
         model.addAttribute("member", memberDetailDto);
         return "member/memberDetail";
     }

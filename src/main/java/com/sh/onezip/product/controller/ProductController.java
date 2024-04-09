@@ -398,5 +398,4 @@ public class ProductController {
         return "redirect:/product/productOrderList.do";
     }
 
-
 }
