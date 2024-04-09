@@ -314,7 +314,8 @@ public class ProductService {
 
     // 사업자 상품 등록
     public void createProductBiz(ProductDetailDto productDetailDto) {
-        Product product = productRepository.save(convertToProductDetailInsertDto(productDetailDto));
+        Product tempProduct = convertToProductDetailInsertDto(productDetailDto);
+        Product product = productRepository.save(tempProduct);
         List<ProductOptionDto> productOptionList = productDetailDto.getProductOptionlist();
         if (productOptionList != null) {
             for (ProductOptionDto productOptionDto : productOptionList) {

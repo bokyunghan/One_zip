@@ -121,11 +121,13 @@ public class BusinessController {
                 log.debug("attachmentCreateDto = {}", attachmentCreateDto);
                 productDetailDto.addAttachmentCreateDto(attachmentCreateDto);
             }
+
         }
 
         // 회원 정보 설정
         Member member = memberDetails.getMember();
-        productDetailDto.setMemberId(member.getId());
+//        productDetailDto.setMemberId(member.getId());
+        productDetailDto.setMember(member);
 
         // DB 저장(사업자 상품 등록, 첨부파일)
         productService.createProductBiz(productDetailDto);
