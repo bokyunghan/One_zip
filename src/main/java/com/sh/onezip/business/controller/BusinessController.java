@@ -104,7 +104,7 @@ public class BusinessController {
 
     @PostMapping("/productDetailList.do")
     public String productDetailList(
-            @Valid BizProductDetailDto bizProductDetailDto,
+            @Valid ProductDetailDto productDetailDto,
             BindingResult bindingResult,
             @RequestParam("upFile") List<MultipartFile> upFiles,
             @AuthenticationPrincipal MemberDetails memberDetails,
@@ -120,21 +120,23 @@ public class BusinessController {
             if (upFile.getSize() > 0) {
                 AttachmentCreateDto attachmentCreateDto = s3FileService.upload(upFile);
                 log.debug("attachmentCreateDto = {}", attachmentCreateDto);
-                bizProductDetailDto.addAttachmentCreateDto(attachmentCreateDto);
+                productDetailDto.addAttachmentCreateDto(attachmentCreateDto);
             }
+
         }
 
         // 회원 정보 설정
         Member member = memberDetails.getMember();
-//        bizProductDetailDto.setMemberId(member.getId());
-        bizProductDetailDto.setMember(member);
+//        productDetailDto.setMemberId(member.getId());
+        productDetailDto.setMember(member);
 
         // DB 저장(사업자 상품 등록, 첨부파일)
-        productService.createProductBiz(bizProductDetailDto);
+        productService.createProductBiz(productDetailDto);
 
         redirectAttributes.addFlashAttribute("msg", "상품이 등록되었습니다 🎁");
         return "redirect:/business/productList.do";
     }
+
 
     @GetMapping("/productUpdateList.do")
     public void productUpdateList(@RequestParam Long id, Model model) {
@@ -236,6 +238,8 @@ public class BusinessController {
         model.addAttribute("product", product); // 상품 고유번호
     }
 }
+
+
 //    @GetMapping("/businessQnACenter.do")
 //    public void businessQnACenter(@AuthenticationPrincipal MemberDetails memberDetails,
 //                                  @PageableDefault(size = 6, page = 0) Pageable pageable,

@@ -16,23 +16,26 @@ import java.util.List;
 @Data
 public class ProductDetailDto {
     // 사업자 상품 수정 용
-    private Member member;
-    private Long id;
-    private String productName;
-    private String businessmember;
-    private ProductType productTypeCode;
-    private int productPrice;
+    private Member member; //
+    private Long id; //
+    private String productName; //
+//    private String businessmember;
+    private ProductType productTypecode; //
+    private int productPrice; //
     private int applyPrice; // product에 없는 값. // 실제 판매 가격
-    private double discountRate;
+    private double discountRate; //
     private LocalDate regDate;
     private List<ProductOption> productOptions;
     // 사업자 상품 등록 용
     private List<ProductOptionDto> productOptionlist;
-    private String bizMemberId; // product에 없는 값.
+//    private String bizMemberId; // product에 없는 값.
     private List<Attachment> attachmentList; // product에 없는 값.
     private List<AttachmentCreateDto> attachments = new ArrayList<>(); // 사업자 상품 등록 용
-    private Long memberId; // 사업자 등록 용 #Product#memberId
+//    private Long memberId; // 사업자 등록 용 #Product#memberId
     private int OriginalPrice;
+
+
+
     // 사업자 상품 등록 용
     public void addAttachmentCreateDto(AttachmentCreateDto attachmentCreateDto) {
         this.attachments.add(attachmentCreateDto);

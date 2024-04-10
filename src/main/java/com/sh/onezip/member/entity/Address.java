@@ -33,6 +33,7 @@ public class Address {
     private String recipientName;
     @Column(nullable = false)
     private String recipientPhone;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private AddressType addressType;
     @Column
@@ -41,7 +42,7 @@ public class Address {
     private String detailAddress;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
