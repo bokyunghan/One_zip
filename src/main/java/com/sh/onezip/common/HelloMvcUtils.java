@@ -1,7 +1,5 @@
 package com.sh.onezip.common;
 
-import com.sh.onezip.productquestion.dto.ProductQuestionDto;
-
 public class HelloMvcUtils {
 
     static String previous = """

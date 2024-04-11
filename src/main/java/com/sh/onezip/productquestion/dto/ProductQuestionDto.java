@@ -1,13 +1,8 @@
 package com.sh.onezip.productquestion.dto;
-
-import com.sh.onezip.businessproduct.entity.Businessmember;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productanswer.entity.ProductAnswer;
-import com.sh.onezip.productquestion.entity.ProductQuestion;
 import lombok.Data;
-
-import java.time.LocalDate;
 
 @Data
 public class ProductQuestionDto{
@@ -17,5 +12,5 @@ public class ProductQuestionDto{
     private String qContent;
     private String qRegdate;
     private ProductAnswer productAnswer;
-    private Businessmember businessmember;
+    private Member member;
 }

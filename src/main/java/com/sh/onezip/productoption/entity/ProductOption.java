@@ -22,7 +22,7 @@ public class ProductOption {
     )
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_no")
+    @JoinColumn(name = "product_id")
     private Product product;
     @Column(name = "option_name")
     private String optionName;
@@ -32,4 +32,5 @@ public class ProductOption {
     private int optionCost;
     @Column(name = "ne_option")
     private boolean neOption;
+
 }

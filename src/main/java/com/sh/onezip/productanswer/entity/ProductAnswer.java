@@ -1,6 +1,6 @@
 package com.sh.onezip.productanswer.entity;
 
-import com.sh.onezip.businessproduct.entity.Businessmember;
+import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Data
 @Entity
-@Table(name = "tb_qanwers")
+@Table(name = "tb_qanwer")
 @ToString(exclude = "productQuestion")
 public class ProductAnswer {
     @Id
@@ -26,11 +26,11 @@ public class ProductAnswer {
     @Column
     private Long id;
     @OneToOne
-    @JoinColumn(name = "pquestions_no")
+    @JoinColumn(name = "pquestions_id")
     private ProductQuestion productQuestion;
     @ManyToOne
-    @JoinColumn(name = "biz_member_id")
-    private Businessmember businessmember;
+    @JoinColumn(name = "member_id")
+    private Member member;
     @Column
     private String aContent;
     @CreationTimestamp

@@ -13,7 +13,7 @@ public class ProductPurchaseInfoDto {
     private String productName;
     private int productQuantity;
     private int productPrice;
-    private int discountRate;
+    private double discountRate;
     private int totalProductPrice;
     private int totalDiscountPrice;
     private int totalOptionCost;
