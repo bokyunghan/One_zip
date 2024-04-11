@@ -95,7 +95,6 @@ public class ProductService {
 
     // variable 선언 end
 
-
     // KMJ start
 
     public Page<ProductListDto> productListDtoFindAllByPrice(Pageable pageable, int price) {
@@ -126,7 +125,8 @@ public class ProductService {
         ProductListDto productListDto = modelMapper.map(product, ProductListDto.class);
         productListDto.setMemberName(product.getMember().getName());
         productListDto.setApplyPrice((int) (product.getProductPrice() * (1 - product.getDiscountRate())));
-        productListDto.setAttachmentList(attachmentRepository.findProductAttachmentToList(productListDto.getId(), "SP"));
+        productListDto
+                .setAttachmentList(attachmentRepository.findProductAttachmentToList(productListDto.getId(), "SP"));
         return productListDto;
     }
 
@@ -155,20 +155,22 @@ public class ProductService {
 
     public boolean postVerify(Map<String, String> requestData, Member member) {
         Payment payment = paymentRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
-        if((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
-                (payment.getAmount() == Integer.parseInt(requestData.get("amount")))){
+        if ((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
+                (payment.getAmount() == Integer.parseInt(requestData.get("amount")))) {
             System.out.println("결제후 검증 완료!");
             return true;
         }
         return false;
     }
 
-
     public void preVerify(Map<String, String> requestData, Member member) {
 
-        ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
+        ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid")))
+                .orElse(null);
         Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
-        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);;
+        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId")))
+                .orElse(null);
+        ;
         int productQuantity = Integer.parseInt(requestData.get("productQuantity"));
 
         // 결제 객체 생성
@@ -183,11 +185,11 @@ public class ProductService {
                 .merchantUid(requestData.get("merchant_uid"))
                 .build();
 
-        int afterApplyPrice = (int)(productOption.getOptionCost() + (product.getProductPrice() * (1 - product.getDiscountRate())));
+        int afterApplyPrice = (int) (productOption.getOptionCost()
+                + (product.getProductPrice() * (1 - product.getDiscountRate())));
         System.out.println("afterApplyPrice: " + afterApplyPrice);
 
-
-        //주문 객체 생성
+        // 주문 객체 생성
         OrderProduct orderProduct = OrderProduct
                 .builder()
                 .productLog(productLog)
@@ -206,10 +208,9 @@ public class ProductService {
         doProductRefund(accessToken, requestData);
     }
 
-    public String getAccessToken(){
+    public String getAccessToken() {
 
         RestTemplate restTemplate = new RestTemplate();
-
 
         // HttpHeaders 객체 생성 (header 설정)
         HttpHeaders headers = new HttpHeaders();
@@ -237,19 +238,17 @@ public class ProductService {
                 URI.create(url),
                 HttpMethod.POST,
                 httpEntity,
-                Map.class
-        );
+                Map.class);
 
-        String []strArr = responseEntity.getBody().get("response").toString().split(",");
-        String [] nextStrArrIndex = strArr[0].split("=");
+        String[] strArr = responseEntity.getBody().get("response").toString().split(",");
+        String[] nextStrArrIndex = strArr[0].split("=");
         String accessToken = nextStrArrIndex[1];
-
 
         return accessToken;
 
     }
 
-    public void doProductRefund(String accessToken, Map<String, String> requestData){
+    public void doProductRefund(String accessToken, Map<String, String> requestData) {
         RestTemplate restTemplate = new RestTemplate();
 
         Long productLogId = Long.parseLong(requestData.get("merchant_uid"));
@@ -259,10 +258,9 @@ public class ProductService {
 
         System.out.println("requestData는 :" + requestData);
 
-//        if(productLog.getShppingState().toString().equals("RE")){
-//
-//        }
-
+        // if(productLog.getShppingState().toString().equals("RE")){
+        //
+        // }
 
         // HttpHeaders 객체 생성 (header 설정)
         HttpHeaders headers = new HttpHeaders();
@@ -292,18 +290,14 @@ public class ProductService {
                 URI.create(url),
                 HttpMethod.POST,
                 httpEntity,
-                Map.class
-        );
+                Map.class);
         System.out.println("flag-2:");
 
         System.out.println("responseEntity결제 취소 정보: " + responseEntity);
 
-
     }
 
     // KMJ end
-
-
 
     // HBK start
 

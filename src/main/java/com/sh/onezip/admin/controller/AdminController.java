@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+
 @Controller
 @RequestMapping("/admin")
 @Slf4j
@@ -172,7 +173,11 @@ public class AdminController {
 
     @PostMapping("/businessmemberList.do")
     public String businessmemberList(@RequestParam Long id,
+<<<<<<< HEAD
+                                     RedirectAttributes redirectAttributes) {
+=======
                                            RedirectAttributes redirectAttributes) {
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
         businessService.deleteById(id);
         attachmentService.deleteByphotoId(id);
         return "redirect:/admin/businessmemberList.do";
@@ -227,6 +232,10 @@ public class AdminController {
         return "redirect:/admin/businessmemberDetailList.do?id=" + id;
     }
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
     @GetMapping("/customerACenterList.do")
     public void customerCenterLists(@PageableDefault(size = 8, page = 0) Pageable pageable, Model model) {
 
@@ -311,6 +320,10 @@ public class AdminController {
     @PostMapping("/customerACenterUpdateList.do")
     public String customerACenterUpdateList(@RequestParam Long id,
                                             @RequestParam String newAoneContent,
+<<<<<<< HEAD
+                                            @RequestParam Long memberId, // 회원 ID 파라미터 추가(회원고유번호)
+=======
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
                                             RedirectAttributes redirectAttributes) {
 
         // 답변 고유번호로 기존 답변을 찾음
@@ -321,6 +334,15 @@ public class AdminController {
             // Optional에서 값 가져오기
             AnswerCenter newAnswer = answerCenter.get();
             newAnswer.setAoneContent(newAoneContent);
+<<<<<<< HEAD
+
+//            // 회원 ID에 해당하는 회원 객체 가져오기
+//            Member member = memberService.findByAOneMemberId(memberId);
+
+            // 가져온 회원 객체를 답변에 설정
+//            newAnswer.setMember(member);
+=======
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
             answerCenterService.updateAnswerCenter(newAnswer);
         } else {
             // 에러 페이지로 이동 (해당 답변을 찾지 못한 경우 또는 멤버를 찾지 못한 경우)
@@ -339,6 +361,10 @@ public class AdminController {
 }
 
 
+<<<<<<< HEAD
+
+
+=======
 //    @PostMapping("/boardUpdate.do")
 //    public String update(BoardUpdateDto boardUpdateDto,
 //                         Model model,
@@ -352,3 +378,4 @@ public class AdminController {
 //
 //        return "redirect:/board/boardDetail.do?id=" + id;
 //    }
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
