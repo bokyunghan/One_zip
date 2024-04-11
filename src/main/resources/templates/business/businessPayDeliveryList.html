@@ -6,183 +6,113 @@
 <head>
 </head>
 <style layout:fragment="style">
-    div[data-product-id] {
-        cursor: pointer;
-    }
 </style>
 <div layout:fragment="content">
-<!-- nav start  -->
+    <!-- nav start  -->
     <div class="grid justify-items-center m-11 mx-64">
         <div class="border-b border-gray-200">
             <div class="sm:flex sm:items-baseline">
-                <h3 class="text-base font-semibold leading-6 text-gray-900" id="productUpdateList" onclick="changeButtonStyle('productUpdateList')">
-                    상품상세페이지
-                </h3>
                 <div class="mt-4 sm:ml-10 sm:mt-0">
                     <nav class="-mb-px flex space-x-8">
-                        <a th:href="@{'/business/businessQnACenter.do?id=' + ${product.id}}" id="productQnAButton" onclick="changeButtonStyle('productQnAButton')"
+                        <a th:href="@{'/business/productUpdateList.do?id=' + ${product.id}}" id="productUpdateButton" onclick="changeButtonStyle('productUpdateButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품상세페이지</a>
+                        <a th:href="@{'/business/businessQnACenter.do?id='+ ${product.id}}" id="businessQnACenter" onclick="changeButtonStyle('businessQnACenter')"
                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품문의게시판</a>
                         <a th:href="@{'/business/businessAllReview.do?id='+ ${product.id}}" id="productReviewButton" onclick="changeButtonStyle('productReviewButton')"
                            class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품리뷰모음</a>
-                        <a th:href="@{'/business/businessPayDeliveryList.do?id='+ ${product.id}}" id="productPayDeliveryButton" onclick="changeButtonStyle('productPayDeliveryButton')"
-                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품결제 및 배송여부</a>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900" id="businessPayDeliveryList" onclick="changeButtonStyle('businessPayDeliveryList')">
+                            상품결제 및 배송여부
+                        </h3>
                     </nav>
                 </div>
             </div>
         </div>
-</div>
+    </div>
     <!-- nav end  -->
-
-    <form name="memberCreateFrm" th:action="@{/business/productUpdateList.do}" method="POST" style="margin-right: 30rem; margin-top: -80px;" class="mt-3 max-w-xl sm:mt-3 w-5/12 ml-auto" enctype="multipart/form-data">
-    <div th:if="${product}">
-           <input type="hidden" id="id" name="id" th:value="${product.member.id}">
-           <input type="hidden" id="pid" name="id" th:value="${product.id}">
-    <div class="bg-white">
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:grid lg:max-w-7xl lg:grid-cols-2 lg:gap-x-8 lg:px-8">
-            <!-- Product details -->
-            <div class="lg:max-w-lg lg:self-end">
-                <nav aria-label="Breadcrumb">
-                    <ol role="list" class="flex items-center space-x-2">
-                        <li>
-                            <div class="flex items-center text-sm">
-                                <input id="productTypeCode" th:value="${product.productTypecode}" class="form-control block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" readonly/>
-                                <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="ml-2 h-5 w-5 flex-shrink-0 text-gray-300">
-                                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
-                                </svg>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="flex items-center text-sm">
-                                <p class="font-medium text-gray-500">상품분류코드는 변경 할 수 없습니다.</p>
-                            </div>
-                        </li>
-                    </ol>
-                </nav>
-
-                <div class="mt-4">
-                    <input id="productName" th:value="${product.productName}" class="form-control block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                </div>
-
-                <section aria-labelledby="information-heading" class="mt-4">
-                    <h2 id="information-heading" class="sr-only">Product information</h2>
-
-                    <div class="flex items-center">
-                        <input id="productPrice" th:value="${product.productPrice}" class="form-control block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-
-                        <div class="ml-4 border-l border-gray-300 pl-4">
-                            <div class="flex items-center">
-                                <input id="discountRate" th:value="${product.discountRate}" class="form-control block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                            </div>
-                        </div>
-                    </div><br>
-                    <a class="font-medium text-gray-500 text-sm">정가 / 할인율을 작성해주세요.</a>
-                </section>
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 text-center">상품결제 및 배송여부 (Customer PayDeliveryList)</h2><br>
+    <p class="text-lg font-semibold text-gray-800 text-center">총 2건의 상품 질문이 조회되었습니다.</p><br>
+        <!-- 첫 번째 주문 정보 -->
+        <div class="min-w-0 flex-auto text-center">
+<!--            <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">-->
+            <div class="min-w-0 flex-auto">
+                <p class="text-base font-semibold leading-5 text-gray-900">상품 주문 일자 - 2024/04/03</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|주문 상품 정보 : ${product.productName}|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|최종 결제 금액 : ${product.productPrice}원|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">배송비(판매자) - 2500원</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">주문상태 - 배송완료</p>
             </div>
-
-            <!-- Product image -->
-            <div class="mt-10 lg:col-start-2 lg:row-span-2 lg:mt-0 lg:self-center">
-                <div class="mt-10">
-                    <button type="submit" class="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">상품수정완료</button>
-                </div> <br> <br>
-                <div class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg">
-                    <img th:if="${#lists.isEmpty(product.attachmentList)}" th:src="@{/images/일반회원.png}" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                    <img th:if="!${#lists.isEmpty(product.attachmentList)}" th:src="${product.attachmentList[0].url}" alt="Front of men&#039;s Basic Tee in black." class="h-full w-full object-cover object-center lg:h-full lg:w-full">
-                    <br><label class="block text-sm font-semibold leading-6 text-gray-900">현재 원집 상품 페이지에 등록되어있는</label>
-                    <label class="block text-sm font-semibold leading-6 text-gray-900">이미지 입니다.</label>
-                </div>
-                <div class="custom-file"><br>
-                    <div class="mt-2.5">
-                        <input type="file" name="upFile" accept="image/*" class="form-input block w-full py-3 px-4 border rounded-md">
-                        <input type="hidden" name="fileType" value="SP" />
-                        <p class="mt-1 text-sm leading-6 text-gray-600">* 상품관련이미지 첨부(수정용 이미지)</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Product form -->
-
-            <div class="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
-                <div class="sm:col-span-2">
-                    <label for="totalStock" class="block text-sm font-semibold leading-6 text-gray-900">상품 납품 수량</label>
-                    <div class="mt-2.5">
-                        <input type="totalStock" name="totalStock" id="totalStock" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="상품 수량 등록(50이상~300미만)" />
-                    </div>
-                </div>
-                <button class="mt-2 text-base text-gray-700" id="showOptionsBtn">➕ 상품옵션추가 (선택사항)</button>
-                <div id="optionsContainer">
-                    <!-- 기본적인 옵션 입력란 -->
-                    <div class="optionsGroup">
-                        <div class="sm:col-span-1">
-                            <br> <label for="optionName" class="block text-sm font-semibold leading-6 text-gray-900">옵션명</label>
-                            <div class="mt-2.5">
-                                <input type="optionName" name="optionName" id="optionName" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
-                            </div>
-                        </div>
-                        <div class="sm:col-span-1">
-                            <label for="optionCost" class="block text-sm font-semibold leading-6 text-gray-900">추가요금</label>
-                            <div class="mt-2.5">
-                                <input type="optionCost" name="optionCost" id="optionCost" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-6 text-center">
-                    <a href="#" class="group inline-flex text-base font-medium">
-                        <svg class="mr-2 h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-                        </svg>
-                        <span class="text-gray-500 hover:text-gray-700">Lifetime OneZip</span>
-                    </a>
-                </div>
-                </form>
-                </section>
+        </div> <br>
+        <!-- 두 번째 주문 정보 -->
+        <div class="min-w-0 flex-auto text-center">
+<!--            <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">-->
+            <div class="min-w-0 flex-auto">
+                <p class="text-base font-semibold leading-5 text-gray-900">상품 주문 일자 - 2024/04/05</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|주문 상품 정보 : ${product.productName}|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|최종 결제 금액 : ${product.productPrice}원|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">배송비(판매자) - 2500원</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">주문상태 - 상품준비중</p>
             </div>
         </div>
-    </div>
-</div>
-</div>
 
-<script layout:fragment="script">
-    // 페이지가 로드될 때 실행될 함수입니다.
-    document.addEventListener('DOMContentLoaded', function() {
-        // '상품문의게시판' 버튼과 '상품리뷰모음' 버튼을 가져옵니다.
-        const productQnAButton = document.getElementById('productQnAButton');
-        const productReviewButton = document.getElementById('productReviewButton');
-        const productPayDeliveryButton = document.getElementById('productPayDeliveryButton');
-        // '상품문의게시판' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
-        productQnAButton.addEventListener('click', function() {
-            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
-            changeButtonStyle('productQnAButton');
-        });
-        // '상품리뷰모음' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
-        productReviewButton.addEventListener('click', function() {
-            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
-            changeButtonStyle('productReviewButton');
-        });
-        // '상품결제및배송여부' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
-        productPayDeliveryButton.addEventListener('click', function() {
-            // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
-            changeButtonStyle('productPayDeliveryButton');
-        });
-    });
 
-    // 버튼 스타일을 변경하는 함수입니다.
-    function changeButtonStyle(clickedId) {
-        // 모든 버튼 요소를 선택합니다.
-        const buttons = document.querySelectorAll('nav a');
-        // 각 버튼에 대해 스타일을 변경합니다.
-        buttons.forEach(button => {
-            // 기존 스타일 클래스를 제거합니다.
-            button.classList.remove('border-indigo-500', 'text-indigo-600');
-            // 새로운 스타일 클래스를 추가합니다.
-            button.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+
+<!--    <div class="pagination" style="text-align: center;">-->
+<!--        <ul class="pagination-list" style="display: flex; justify-content: center;">-->
+<!--            &lt;!&ndash; 이전 페이지 링크 &ndash;&gt;-->
+<!--            <li th:if="${number > 0}">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number - 1}, size=${size})}" class="pagination-link"> 이전페이지로 이동하기 </a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash; 페이지 번호 링크 &ndash;&gt;-->
+<!--            <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNumber == number ? 'active' : ''}" class="pagination-item" style="margin: 0 5px;">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${pageNumber}, size=${size})}" th:text="${pageNumber + 1}" class="pagination-link" style="font-size: 16px;"></a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash; 다음 페이지 링크 &ndash;&gt;-->
+<!--            <li th:if="${number + 1 < totalPages}">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number + 1}, size=${size})}" class="pagination-link"> 다음페이지로 이동하기 </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+    <script layout:fragment="script">
+        // 페이지가 로드될 때 실행될 함수입니다.
+        document.addEventListener('DOMContentLoaded', function() {
+            // '상품문의게시판' 버튼과 '상품리뷰모음' 버튼을 가져옵니다.
+            const productUpdateButton = document.getElementById('productUpdateButton');
+            const productReviewButton = document.getElementById('productReviewButton');
+            const businessQnACenter = document.getElementById('businessQnACenter');
+            // '상품상세페이지' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            productUpdateButton.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('productUpdateButton');
+            });
+            // '상품리뷰모음' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            productReviewButton.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('productReviewButton');
+            });
+            // '질답게시판' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            businessQnACenter.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('businessQnACenter');
+            });
         });
-        // 클릭된 버튼의 요소를 가져옵니다.
-        const clickedButton = document.getElementById(clickedId);
-        // 클릭된 버튼에 새로운 스타일 클래스를 추가하고, 기존 스타일 클래스를 제거합니다.
-        clickedButton.classList.add('border-indigo-500', 'text-indigo-600');
-        clickedButton.classList.remove('border-transparent', 'text-gray-500');
-    }
-</script>
+
+        // 버튼 스타일을 변경하는 함수입니다.
+        function changeButtonStyle(clickedId) {
+            // 모든 버튼 요소를 선택합니다.
+            const buttons = document.querySelectorAll('nav a');
+            // 각 버튼에 대해 스타일을 변경합니다.
+            buttons.forEach(button => {
+                // 기존 스타일 클래스를 제거합니다.
+                button.classList.remove('border-indigo-500', 'text-indigo-600');
+                // 새로운 스타일 클래스를 추가합니다.
+                button.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+            });
+            // 클릭된 버튼의 요소를 가져옵니다.
+            const clickedButton = document.getElementById(clickedId);
+            // 클릭된 버튼에 새로운 스타일 클래스를 추가하고, 기존 스타일 클래스를 제거합니다.
+            clickedButton.classList.add('border-indigo-500', 'text-indigo-600');
+            clickedButton.classList.remove('border-transparent', 'text-gray-500');
+        }
+
+    </script>
 </html>

@@ -11,6 +11,7 @@ import com.sh.onezip.customerquestioncenter.entity.QuestionCenter;
 import com.sh.onezip.customerquestioncenter.service.QuestionCenterService;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
+import com.sh.onezip.product.dto.BizProductDetailDto;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.entity.Product;
@@ -136,6 +137,7 @@ public class BusinessController {
         return "redirect:/business/productList.do";
     }
 
+
     @GetMapping("/productUpdateList.do")
     public void productUpdateList(@RequestParam Long id, Model model) {
         // 회원 고유번호를 찾고 productListDto랑 매핑
@@ -229,7 +231,15 @@ public class BusinessController {
         model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
     }
+    @GetMapping("businessPayDeliveryList.do")
+    public void businessPayDeliveryList(@RequestParam Long id, Model model){
+        // 상품고유번호 불러오기
+        Product product = productService.findById(id);
+        model.addAttribute("product", product); // 상품 고유번호
+    }
 }
+
+
 //    @GetMapping("/businessQnACenter.do")
 //    public void businessQnACenter(@AuthenticationPrincipal MemberDetails memberDetails,
 //                                  @PageableDefault(size = 6, page = 0) Pageable pageable,

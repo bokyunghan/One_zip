@@ -99,14 +99,16 @@
                 <div class="sm:col-span-2">
                     <label for="productName" class="block text-sm font-semibold leading-6 text-gray-900">상품명</label>
                     <div class="mt-2.5">
-                        <input type="productName" name="productName" id="productName" value="" required class="form-control block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"  />
+                        <input type="text" name="productName" id="productName" value="" required class="form-control block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"  />
                     </div>
                 </div>
                 <div class="sm:col-span-2">
                     <label for="productTypeCode" class="block text-sm font-semibold leading-6 text-gray-900">상품분류코드</label>
                     <p class="mt-2 text-sm text-gray-700"> * 가구, 가전·디지털, 생활용품(FU), 식품(FO)</p>
                     <div class="mt-2.5">
+
                         <input type="productTypecode" name="productTypecode" id="productTypecode" value="" required class="form-control block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="FU / FO로 입력해주세요." />
+
                     </div>
                 </div>
                 <div class="sm:col-span-1">
@@ -124,7 +126,7 @@
                 <div class="sm:col-span-2">
                     <label for="totalStock" class="block text-sm font-semibold leading-6 text-gray-900">상품 납품 수량</label>
                     <div class="mt-2.5">
-                        <input type="totalStock" name="totalStock" id="totalStock" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="상품 수량 등록(50이상~300미만)" />
+                        <input type="number" name="totalStock" id="totalStock" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="상품 수량 등록(50이상~300미만)" />
                     </div>
                 </div>
                 <button class="mt-2 text-base text-gray-700" id="showOptionsBtn">➕ 상품옵션추가 (선택사항)</button>
@@ -134,13 +136,13 @@
                         <div class="sm:col-span-1">
                             <label for="optionName" class="block text-sm font-semibold leading-6 text-gray-900">옵션명</label>
                             <div class="mt-2.5">
-                                <input type="optionName" name="optionName" id="optionName" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
+                                <input type="text" name="optionName" id="optionName" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
                             </div>
                         </div>
                         <div class="sm:col-span-1">
                             <label for="optionCost" class="block text-sm font-semibold leading-6 text-gray-900">추가요금</label>
                             <div class="mt-2.5">
-                                <input type="optionCost" name="optionCost" id="optionCost" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
+                                <input type="number" name="optionCost" id="optionCost" class="optionInput block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="옵션 추가 시 입력해주세요." />
                             </div>
                         </div><br>
                     </div>

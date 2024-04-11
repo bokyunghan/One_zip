@@ -9,6 +9,7 @@ import com.sh.onezip.orderproduct.entity.OrderProduct;
 import com.sh.onezip.orderproduct.repository.OrderProductRepository;
 import com.sh.onezip.payment.entity.Payment;
 import com.sh.onezip.payment.repository.PaymentRepository;
+import com.sh.onezip.product.dto.BizProductDetailDto;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.dto.ProductPurchaseInfoDto;
@@ -155,8 +156,8 @@ public class ProductService {
 
     public boolean postVerify(Map<String, String> requestData, Member member) {
         Payment payment = paymentRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
-        if((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
-                (payment.getAmount() == Integer.parseInt(requestData.get("amount")))){
+        if ((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
+                (payment.getAmount() == Integer.parseInt(requestData.get("amount")))) {
             System.out.println("결제후 검증 완료!");
             return true;
         }
@@ -168,7 +169,8 @@ public class ProductService {
 
         ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
         Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
-        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);;
+        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);
+        ;
         int productQuantity = Integer.parseInt(requestData.get("productQuantity"));
 
         // 결제 객체 생성
@@ -183,7 +185,7 @@ public class ProductService {
                 .merchantUid(requestData.get("merchant_uid"))
                 .build();
 
-        int afterApplyPrice = (int)(productOption.getOptionCost() + (product.getProductPrice() * (1 - product.getDiscountRate())));
+        int afterApplyPrice = (int) (productOption.getOptionCost() + (product.getProductPrice() * (1 - product.getDiscountRate())));
         System.out.println("afterApplyPrice: " + afterApplyPrice);
 
 
@@ -206,7 +208,7 @@ public class ProductService {
         doProductRefund(accessToken, requestData);
     }
 
-    public String getAccessToken(){
+    public String getAccessToken() {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -240,8 +242,8 @@ public class ProductService {
                 Map.class
         );
 
-        String []strArr = responseEntity.getBody().get("response").toString().split(",");
-        String [] nextStrArrIndex = strArr[0].split("=");
+        String[] strArr = responseEntity.getBody().get("response").toString().split(",");
+        String[] nextStrArrIndex = strArr[0].split("=");
         String accessToken = nextStrArrIndex[1];
 
 
@@ -249,7 +251,7 @@ public class ProductService {
 
     }
 
-    public void doProductRefund(String accessToken, Map<String, String> requestData){
+    public void doProductRefund(String accessToken, Map<String, String> requestData) {
         RestTemplate restTemplate = new RestTemplate();
 
         Long productLogId = Long.parseLong(requestData.get("merchant_uid"));
@@ -304,7 +306,6 @@ public class ProductService {
     // KMJ end
 
 
-
     // HBK start
 
     public Page<ProductListDto> findAllBizIdProduct(Long id, Pageable pageable) {
@@ -331,8 +332,8 @@ public class ProductService {
 
     }
 
-    private Product convertToProductDetailInsertDto(ProductDetailDto productDetailDto) {
-        Product product = modelMapper.map(productDetailDto, Product.class);
+    private Product convertToProductDetailInsertDto(ProductDetailDto ProductDetailDto) {
+        Product product = modelMapper.map(ProductDetailDto, Product.class);
         return product;
     }
 
@@ -340,17 +341,12 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
-    public ProductListDto findByBizProductId(Long id) {
-        Product product = productRepository.findByBizProductId(id);
-        return convertToProductListDto(product);
-    }
-
     public void updateBizProduct(ProductDetailDto productDetailDto) {
         Product product = productRepository.save(convertToProductDetailUpdateDto(productDetailDto));
         productDetailDto.getAttachments().forEach(attachmentCreateDto -> {
-        attachmentCreateDto.setRefId(product.getId());
-        attachmentCreateDto.setRefType("SP");
-        attachmentService.createAttachment(attachmentCreateDto);
+            attachmentCreateDto.setRefId(product.getId());
+            attachmentCreateDto.setRefType("SP");
+            attachmentService.createAttachment(attachmentCreateDto);
         });
 
     }
@@ -360,4 +356,10 @@ public class ProductService {
         return product;
     }
 
+
+    public ProductListDto findByBizProductId(Long id) {
+        Product product = productRepository.findByBizProductId(id);
+        return convertToProductListDto(product);
+    }
 }
+
