@@ -5,6 +5,118 @@
 		layout:decorate="~{layout/default}">
 <head>
 	<title>구매 정보 확인</title>
+	<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		var IMP = window.IMP;
+		IMP.init("imp52366701");
+
+		function requestPay() {
+
+			IMP.request_pay(
+					{
+						pg: "html5_inicis",
+						pay_method: "card",
+						merchant_uid: '[[${productPurchaseInfoDto.productLogId}]]',
+						name: '[[${productPurchaseInfoDto.productName}]]',
+						amount: '[[${productPurchaseInfoDto.totalApplyPrice}]]',
+						buyer_name: '[[${productPurchaseInfoDto.member.name}]]',
+						buyer_tel: '[[${productPurchaseInfoDto.member.phone}]]',
+						buyer_addr: "대체할 주소",
+						buyer_postcode: "대체할 우편주소"
+					},
+					function (rsp) {
+
+						// 사전 검증 -> 결제 내용 삽입
+						$.ajax({
+							url: `${contextPath}product/productPreverify.do`,
+							method: "post",
+							headers: { "Content-Type": "application/json",
+								[csrfHeaderName] : csrfToken
+							},
+							data: JSON.stringify({
+								merchant_uid: '[[${productPurchaseInfoDto.productLogId}]]', // 가맹점 주문번호
+								amount: '[[${productPurchaseInfoDto.totalApplyPrice}]]', // 결제 예정금액
+								productId : '[[${productPurchaseInfoDto.id}]]',
+								productOptId : '[[${productPurchaseInfoDto.optionId}]]',
+								productQuantity : '[[${productPurchaseInfoDto.productQuantity}]]'
+							}),
+							success() {
+								console.log('success진입');
+							},
+							complete() {
+								console.log('complete진입');
+							}
+						});
+
+						if(rsp.success){
+							console.log(rsp);
+							// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+							// jQuery로 HTTP 요청
+							jQuery.ajax({
+								url: `${contextPath}product/productPostverify.do`,
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+									[csrfHeaderName] : csrfToken
+								},
+								data: JSON.stringify({
+									imp_uid: rsp.imp_uid,            // 결제 고유번호
+									merchant_uid: rsp.merchant_uid   // 주문번호
+								})
+							}).done(function (result) {
+								console.log(result)
+								// 가맹점 서버 결제 API 성공시 로직
+							})
+						}
+						else{
+							jQuery.ajax({
+								url: `${contextPath}product/productOrderReverse.do`,
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+									[csrfHeaderName] : csrfToken
+								},
+								data: JSON.stringify({
+									imp_uid: '[[${productPurchaseInfoDto.productLogId}]]',            // 결제 고유번호
+									merchant_uid: rsp.merchant_uid   // 주문번호
+								})
+							}).done(function (result) {
+								console.log(result)
+								// 가맹점 서버 결제 API 성공시 로직
+							})
+							alert("결제에 실패하였습니다. 에러 내용: " + rsp.error_msg);
+						}
+						console.log(rsp);
+						// 결제 성공 시: 결제 승인 또는 가상계좌 발급에 성공한 경우
+						// jQuery로 HTTP 요청
+						jQuery.ajax({
+							url: `${contextPath}product/productPostverify.do`,
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+								[csrfHeaderName] : csrfToken
+							},
+							data: JSON.stringify({
+								imp_uid: rsp.imp_uid,            // 결제 고유번호
+								merchant_uid: rsp.merchant_uid   // 주문번호
+							})
+						}).done(function (result) {
+							console.log(result)
+							// 가맹점 서버 결제 API 성공시 로직
+						})
+
+						window.location.href = "http://localhost:8080/onezip/product/productList.do";
+						// callback
+						// rsp.imp_uid 값으로 결제 단건조회 API를 호출하여 결제결과를 판단합니다.
+					}
+
+
+			);
+
+		}
+
+	</script>
 </head>
 <style layout:fragment="style"></style>
 
@@ -25,10 +137,10 @@
 			<label for="namePhone" class="block text-gray-700">이름 / 연락처:</label>
 			<p id="namePhone" class="mt-2 text-gray-800">[[${productPurchaseInfoDto.member.name}]] / [[${productPurchaseInfoDto.member.phone}]]</p>
 		</div>
-		<div class="mb-4">
-			<label for="address" class="block text-gray-700">주소:</label>
-			<input id="address" name="" th:value="${productPurchaseInfoDto.member.memberAddr}" readonly class="mt-2 p-2 w-full border border-gray-300 rounded" lang="ko-KR">
-		</div>
+<!--		<div class="mb-4">-->
+<!--			<label for="address" class="block text-gray-700">주소:</label>-->
+<!--			<input id="address" name="" th:value="${productPurchaseInfoDto.member.memberAddr}" readonly class="mt-2 p-2 w-full border border-gray-300 rounded" lang="ko-KR">-->
+<!--		</div>-->
 		<div class="mb-4">
 			<label for="shippingRequest" class="block text-gray-700">배송 요청사항:</label>
 			<input type="text" id="shippingRequest" name="shippingRequest" th:value="|배송 시 요청사항을 선택해주세요.|" placeholder="배송 시 요청사항을 선택해주세요." required class="mt-2 p-2 w-full border border-gray-300 rounded">
@@ -71,17 +183,17 @@
 		</div>
 		<div class="mb-4">
 			<label for="finalPrice" class="block text-gray-700">최종 금액:</label>
-			<input type="number" name="sellPrice" id="finalPrice" th:value="${productPurchaseInfoDto.sellPrice}" readonly class="mt-2 p-2 w-full border border-gray-300 rounded text-blue-500" lang="ko-KR">
+			<input type="number" name="totalApplyPrice" id="finalPrice" th:value="${productPurchaseInfoDto.totalApplyPrice}" readonly class="mt-2 p-2 w-full border border-gray-300 rounded text-blue-500" lang="ko-KR">
 		</div>
 
-		<button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-			[[${productPurchaseInfoDto.sellPrice}]]원 결제하기
-		</button>
 
 		<input type="hidden" name="productId" id="productId" th:value="${productPurchaseInfoDto.id}">
 		<input type="hidden" name="productQuantity" id="productQuantity" th:value="${productPurchaseInfoDto.productQuantity}">
 		<input th:if="${productPurchaseInfoDto.productOption != null}" type="hidden" name="productOptId" id="productOptId" th:value="${productPurchaseInfoDto.productOption.id}">
 	</form>
+	<button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded" onclick="requestPay()">
+		[[${productPurchaseInfoDto.totalApplyPrice}]]원 결제하기
+	</button>
 </div>
 
 

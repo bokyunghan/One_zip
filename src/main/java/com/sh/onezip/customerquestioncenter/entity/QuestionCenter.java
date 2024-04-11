@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +23,7 @@ import java.util.List;
 @DynamicUpdate // 영속성컨텍스트의 엔티티와 달라진 필드만 수정
 @Table(name = "tb_qone")
 @ToString(exclude = {"answerCenter"})
+
 public class QuestionCenter {
     @Id
     @GeneratedValue(generator = "seq_QuestionCenter_id_generator")

@@ -9,22 +9,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@Transactional
 @Service
 public class ProductQuestionService {
     @Autowired
     ProductQuestionRepository productQuestionRepository;
     @Autowired
     ModelMapper modelMapper;
+
     public List<ProductQuestion> pquestionFindByProductid(Long id) {
         return productQuestionRepository.pquestionFindByProductid(id);
     }
 
     public Page<ProductQuestionDto> productQuestionDtoFindAllByProductId(Pageable pageable, Long productId) {
-        Page<ProductQuestion> productQuestionPage = productQuestionRepository.productQuestionFindAllByProductId(pageable, productId);
+        Page<ProductQuestion> productQuestionPage = productQuestionRepository
+                .productQuestionFindAllByProductId(pageable, productId);
         return productQuestionPage.map((productQuestion) -> convertToProductQuestionDto(productQuestion));
     }
 
@@ -45,5 +50,22 @@ public class ProductQuestionService {
     public void createQuestion(ProductQuestionCreateDto productQuestionCreateDto) {
         ProductQuestion productQuestion = modelMapper.map(productQuestionCreateDto, ProductQuestion.class);
         productQuestionRepository.save(productQuestion);
+
     }
+
+    public ProductQuestion findQuestionById(Long questionId) {
+        ProductQuestion productQuestion = productQuestionRepository.findById(questionId).orElse(null);
+        return productQuestion;
+    }
+
+    public void deleteQuestionById(Long questionId) {
+        productQuestionRepository.deleteById(questionId);
+    }
+
+    public ProductQuestion findByPQId(Long id) {
+        return productQuestionRepository.findByPQId(id);
+    }
+
+    // HBK start
+
 }

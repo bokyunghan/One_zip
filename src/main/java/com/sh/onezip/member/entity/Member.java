@@ -7,7 +7,9 @@ import com.sh.onezip.customerquestioncenter.entity.QuestionCenter;
 import com.sh.onezip.member.entity.Gender;
 import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productanswer.entity.ProductAnswer;
+import com.sh.onezip.productlog.entity.ProductLog;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
+import com.sh.onezip.productreview.entity.ProductReview;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.apachecommons.CommonsLog;
@@ -28,18 +30,16 @@ import java.util.List;
 @Entity
 @DynamicInsert // null이 아닌 필드만 등록
 @DynamicUpdate // 영속성컨텍스트의 엔티티와 달라진 필드만 수정
+// 
 
-// HBK write Tostring / reason : Member Authority ,QuestionCenter, AnswerCenter stackoverflow
+// HBK write Tostring  / reason : Member Authority ,QuestionCenter, AnswerCenter stackoverflow
+         
 
-@ToString(exclude = {"authorities", "questionCenters", "answerCenters", "addresses", "products", "productQuestions", "productAnswers"})
+@ToString(exclude = {"authorities", "questionCenters", "answerCenters", "productQuestions"})
 @Table(name = "tb_member")
 public class Member {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_Member_id_generator")
-    @SequenceGenerator(
-            name = "seq_Member_id_generator",
-            sequenceName = "tb_member_seq",
+    @IdedValue(strategy = GenerationType eGenerator( name = "seq_Membe sequenceName = "tb_member_seq",
             initialValue = 1,
             allocationSize = 1)
     private Long id;
@@ -52,7 +52,7 @@ public class Member {
     @Column
     private String email;
     @Column(nullable = false)
-    @CreationTimestamp
+    @CreationTimestamp 
     private LocalDate regDate;
     @Column(nullable = false,unique = true)
     private String nickname;
@@ -66,19 +66,17 @@ public class Member {
     private String hobby;
     @Column
     private String mbti;
-    @Column(name = "PROFILE_PICTURE_URL")
+    @Column(name  = "PROFILE_PICTURE_URL")
     private String profileUrl;
-    @Column(name= "PROFILE_PICTURE_KEY")
-    private String profileKey;
 
-
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-//    @JoinColumn(name = "member_id") //authority 테이블의 컬럼명시
+    
+     
+    @OneToMany(mappedBy = "member", fetc
+    // @JoinColumn(name = "member_id") //authority 테이블의 컬럼명시
     private List<Authority> authorities;
 //    private List<Authority> authorities = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @O neToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Address> addresses = new ArrayList<>();
     //여기까지가 HSH 코드
 
@@ -91,16 +89,22 @@ public class Member {
     // HBK end
 
     // KMJ start
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private List<ProductQuestion> productQuestions = new ArrayList<>();
+    private List<ProductQuestion> productQuestions = new ArrayList<
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<ProductAnswer> productAnswers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<ProductReview> productReviews = new ArrayList<>();
 
-    //
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Builder.Default
+    private List<ProductLog> productLogs = new ArrayList<>();
+
+    // KMJ end
 
 }
