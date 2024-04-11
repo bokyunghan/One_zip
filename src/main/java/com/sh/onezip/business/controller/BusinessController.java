@@ -11,7 +11,6 @@ import com.sh.onezip.customerquestioncenter.entity.QuestionCenter;
 import com.sh.onezip.customerquestioncenter.service.QuestionCenterService;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
-import com.sh.onezip.product.dto.BizProductDetailDto;
 import com.sh.onezip.product.dto.ProductDetailDto;
 import com.sh.onezip.product.dto.ProductListDto;
 import com.sh.onezip.product.entity.Product;
@@ -19,6 +18,7 @@ import com.sh.onezip.product.entity.ProductType;
 import com.sh.onezip.product.service.ProductService;
 import com.sh.onezip.productanswer.entity.ProductAnswer;
 import com.sh.onezip.productanswer.service.ProductAnswerService;
+import com.sh.onezip.productoption.service.ProductOptionService;
 import com.sh.onezip.productquestion.dto.ProductQuestionDto;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
 import com.sh.onezip.productquestion.service.ProductQuestionService;
@@ -42,6 +42,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,6 +67,8 @@ public class BusinessController {
     ProductAnswerService productAnswerService;
     @Autowired
     ProductReviewService productReviewService;
+    @Autowired
+    ProductOptionService productOptionService;
 
     @GetMapping("/productList.do")
     public void productList(@AuthenticationPrincipal MemberDetails memberDetails, @PageableDefault(size = 6, page = 0) Pageable pageable, Model model) {
@@ -108,6 +111,7 @@ public class BusinessController {
             BindingResult bindingResult,
             @RequestParam("upFile") List<MultipartFile> upFiles,
             @AuthenticationPrincipal MemberDetails memberDetails,
+            HttpServletRequest httpServletRequest,
             RedirectAttributes redirectAttributes)
             throws IOException {
         if (bindingResult.hasErrors()) {
@@ -125,18 +129,41 @@ public class BusinessController {
 
         }
 
+        List<Object> optNames = new ArrayList<>();
+        List<Object> optStocks = new ArrayList<>();
+        List<Object> optPrices = new ArrayList<>();
+
+        List<List<Object>> optionListOfList = new ArrayList<>();
+
+        for(int i = 0;  ; i++){
+            String optName = httpServletRequest.getParameter("innerOptionName" + i);
+            if(optName == null){
+                break;
+            }
+            optNames.add(optName);
+            optStocks.add(Integer.parseInt(httpServletRequest.getParameter("innerOptionStock" + i)));
+            optPrices.add(Integer.parseInt(httpServletRequest.getParameter("innerOptionPrice" + i)));
+        }
+        System.out.println("optNames: " + optNames);
+        System.out.println("optStocks: " + optStocks);
+        System.out.println("optPrices: " + optPrices);
+
+        optionListOfList.add(optNames);
+        optionListOfList.add(optStocks);
+        optionListOfList.add(optPrices);
+
         // 회원 정보 설정
         Member member = memberDetails.getMember();
 //        productDetailDto.setMemberId(member.getId());
         productDetailDto.setMember(member);
 
         // DB 저장(사업자 상품 등록, 첨부파일)
-        productService.createProductBiz(productDetailDto);
+        Product product = productService.createProductBiz(productDetailDto);
+        productOptionService.productOptionCreate(optionListOfList, product);
 
         redirectAttributes.addFlashAttribute("msg", "상품이 등록되었습니다 🎁");
         return "redirect:/business/productList.do";
     }
-
 
     @GetMapping("/productUpdateList.do")
     public void productUpdateList(@RequestParam Long id, Model model) {
@@ -231,15 +258,7 @@ public class BusinessController {
         model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
     }
-    @GetMapping("businessPayDeliveryList.do")
-    public void businessPayDeliveryList(@RequestParam Long id, Model model){
-        // 상품고유번호 불러오기
-        Product product = productService.findById(id);
-        model.addAttribute("product", product); // 상품 고유번호
-    }
 }
-
-
 //    @GetMapping("/businessQnACenter.do")
 //    public void businessQnACenter(@AuthenticationPrincipal MemberDetails memberDetails,
 //                                  @PageableDefault(size = 6, page = 0) Pageable pageable,
@@ -259,7 +278,7 @@ public class BusinessController {
 //        model.addAttribute("answeredCount", productAnswer != null);
 //    }
 
-    //    @PostMapping("/productUpdateList.do")
+//    @PostMapping("/productUpdateList.do")
 //    public String productUpdateList(
 //            @Valid ProductUpdateDto productUpdateDto,
 //            BindingResult bindingResult,
