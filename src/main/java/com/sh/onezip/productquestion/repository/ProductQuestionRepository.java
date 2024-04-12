@@ -25,3 +25,4 @@ public interface ProductQuestionRepository extends JpaRepository<ProductQuestion
     @Query("select pq from ProductQuestion pq where pq.id = :id")
     ProductQuestion findByPQId(@Param("id") Long id);
 }
+

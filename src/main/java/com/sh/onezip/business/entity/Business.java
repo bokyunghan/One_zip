@@ -34,5 +34,4 @@ public class Business {
     private BizAccess bizRegStatus;
 // HBK end
 
-
 }

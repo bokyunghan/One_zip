@@ -18,7 +18,6 @@
                 <span>(식품 수: <span th:text="${FOCount} + '개'">0</span>,</span>
                 <span>가구 수: <span th:text="${FUCount} + '개'">0</span>,</span>
                 <p class="mt-2 text-sm text-gray-700">환영합니다, 사업자님! 여기는 상품을 관리하는 곳, 사업자 상품 관리 페이지입니다. </br>이 페이지를 통해 사업자님은 상품 등록, 수정, 삭제 기능을 이용하실 수 있습니다. </br>이 페이지는 사용자의 편의성과 효율적인 관리를 위해 설계되었습니다.</p>
-
                 <p class="mt-2 text-sm text-gray-700">* 식품(FO), 가구, 가전·디지털, 생활용품(FU) *</p><br>
                 <h1 class="text-base font-semibold leading-6 text-gray-900">👇 상품 이미지를 누르시면 상품 상세페이지로 이동합니다.</h1>
 <!--                <br><a th:href="@{'/business/businessQnACenter.do?id=' + ${#authentication.principal.member.id}}" class="font-semibold text-gray-900 hover:text-gray-500"> | 사업자 문의 페이지 |</a>-->
@@ -44,10 +43,7 @@
                             </a>
                             <p class="text-gray-500" th:text="${product.productName}+|(${product.productTypecode})|"></p>
                         </div>
-                        <p class="text-sm font-medium text-gray-900" th:text="${product.originalPrice} + '원'"></p>
-
                         <p class="text-sm font-medium text-gray-900" th:text="${product.applyPrice} + '원'"></p>
-
                     </div>
                 </div>
                 <!-- 반복 블록 끝 -->

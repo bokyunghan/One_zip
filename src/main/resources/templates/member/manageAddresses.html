@@ -231,10 +231,9 @@
                                 >
                                     주소
                                 </td>
-                                <td th:text="${address.addressType}"
-                                        class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
-                                >
-                                    기본배송지 여부
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                    <span th:text="${address.addressType.name() == 'D' ? '기본' : '추가'}"></span>
+
                                 </td>
                                 <td
                                         class="relative whitespace-nowrap py-4 pl-3 pr-4 text-center text-sm font-medium sm:pr-6"
@@ -281,6 +280,25 @@
 
         closeModalButton.addEventListener("click", function () {
             modal.classList.add("hidden");
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var errorMessage = "[[${error}]]";
+            if (errorMessage && errorMessage !== "") {
+                alert(errorMessage);
+            }
+        });
+        document.addEventListener("DOMContentLoaded", function() {
+            var tbody = document.querySelector('table tbody');
+            var rows = Array.from(tbody.querySelectorAll('tr'));
+
+            rows.sort(function(a, b) {
+                var aType = a.cells[3].querySelector('span').textContent.trim(); // '기본배송지 여부' 열의 텍스트
+                var bType = b.cells[3].querySelector('span').textContent.trim();
+                return aType === '기본' ? -1 : bType === '기본' ? 1 : 0;
+            });
+
+            rows.forEach(row => tbody.appendChild(row)); // 정렬된 행을 다시 tbody에 추가
         });
     </script>
     <script layout:fragment="script" th:src="@{/js/member/manageAddr.js}"></script>

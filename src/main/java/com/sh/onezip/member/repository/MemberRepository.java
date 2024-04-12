@@ -11,7 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
-
 @Table(name = "tb_member")
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> { // id 타입이 Long인 것은 유지
@@ -32,5 +31,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // id �
 
     @Query("from Member order by regDate asc")
     Page<Member> findAllMembers(Pageable pageable);
-
 }
+

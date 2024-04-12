@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import java.util.List;
-
 @Slf4j
 @Service
 @Transactional
@@ -51,26 +50,25 @@ public class ProductOptionService {
 
         // 옵션 집합의 갯수
         int optionSetSize = optionListOfList.get(0).size();
-        System.out.println("optionSetSize: " + optionSetSize);
-        // int optTypeSize = optionListOfList.size();
+//        int optTypeSize = optionListOfList.size();
 
-        ProductOption productOption[] = new ProductOption[optionSetSize];
-        for (int i = 0; i < optionSetSize; i++) {
+        ProductOption productOption [] = new ProductOption[optionSetSize];
+        for(int i = 0 ; i < optionSetSize; i++){
             productOption[i] = new ProductOption();
             productOption[i].setProduct(product);
             productOption[i].setNeOption(false);
-            productOption[i].setId(((long) (Math.random() * 100) + 50));
+            productOption[i].setId(((long)(Math.random() * 100) + 50));
         }
 
         // 옵션 집합의 갯수 만큼 순회
-        for (int i = 0; i < optionSetSize; i++) {
-            productOption[i].setOptionName((String) optionListOfList.get(0).get(i));
-            productOption[i].setTotalStock((Integer) optionListOfList.get(1).get(i));
-            productOption[i].setOptionCost((Integer) optionListOfList.get(2).get(i));
+        for(int i = 0; i < optionSetSize; i++){
+            productOption[i].setOptionName((String)optionListOfList.get(0).get(i));
+            productOption[i].setTotalStock((Integer)optionListOfList.get(1).get(i));
+            productOption[i].setOptionCost((Integer)optionListOfList.get(2).get(i));
             productOptionRepository.save(productOption[i]);
-            System.out.println("productOption[i]: " + productOption[i]);
         }
     }
+
 
     // HBK start
 }

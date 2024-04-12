@@ -5,6 +5,7 @@ import com.sh.onezip.productquestion.entity.ProductQuestion;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Fetch;
 
 import java.time.LocalDate;
 
@@ -28,7 +29,7 @@ public class ProductAnswer {
     @OneToOne
     @JoinColumn(name = "pquestions_id")
     private ProductQuestion productQuestion;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
     @Column
