@@ -144,9 +144,6 @@ public class BusinessController {
             optStocks.add(Integer.parseInt(httpServletRequest.getParameter("innerOptionStock" + i)));
             optPrices.add(Integer.parseInt(httpServletRequest.getParameter("innerOptionPrice" + i)));
         }
-        System.out.println("optNames: " + optNames);
-        System.out.println("optStocks: " + optStocks);
-        System.out.println("optPrices: " + optPrices);
 
         optionListOfList.add(optNames);
         optionListOfList.add(optStocks);

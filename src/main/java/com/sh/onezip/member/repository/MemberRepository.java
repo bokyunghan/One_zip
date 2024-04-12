@@ -31,8 +31,5 @@ public interface MemberRepository extends JpaRepository<Member, Long> { // id íƒ
 
     @Query("from Member order by regDate asc")
     Page<Member> findAllMembers(Pageable pageable);
-
-//    @Query("from ProductAnswer pa where pa.member.id = :id")
-//    Member findByPId(Long id);
 }
 
