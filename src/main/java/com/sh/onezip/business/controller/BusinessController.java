@@ -258,7 +258,15 @@ public class BusinessController {
         model.addAttribute("number", productReviewDtoPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", productReviewDtoPage.getTotalPages()); // 전체 페이지 수
     }
+
+    @GetMapping("businessPayDeliveryList.do")
+    public void businessPayDeliveryList(@RequestParam Long id, Model model){
+        // 상품고유번호 불러오기
+        Product product = productService.findById(id);
+        model.addAttribute("product", product); // 상품 고유번호
+    }
 }
+
 //    @GetMapping("/businessQnACenter.do")
 //    public void businessQnACenter(@AuthenticationPrincipal MemberDetails memberDetails,
 //                                  @PageableDefault(size = 6, page = 0) Pageable pageable,
