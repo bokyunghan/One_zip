@@ -19,11 +19,7 @@ public class ProductDetailDto {
     private Member member; //
     private Long id; //
     private String productName; //
-<<<<<<< HEAD
 //    private String businessmember;
-=======
-    // private String businessmember;
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     private ProductType productTypecode; //
     private int productPrice; //
     private int applyPrice; // product에 없는 값. // 실제 판매 가격
@@ -32,7 +28,6 @@ public class ProductDetailDto {
     private List<ProductOption> productOptions;
     // 사업자 상품 등록 용
     private List<ProductOptionDto> productOptionlist;
-<<<<<<< HEAD
 //    private String bizMemberId; // product에 없는 값.
     private List<Attachment> attachmentList; // product에 없는 값.
     private List<AttachmentCreateDto> attachments = new ArrayList<>(); // 사업자 상품 등록 용
@@ -41,25 +36,10 @@ public class ProductDetailDto {
 
 
 
-=======
-    // private String bizMemberId; // product에 없는 값.
-    private List<Attachment> attachmentList; // product에 없는 값.
-    private List<AttachmentCreateDto> attachments = new ArrayList<>(); // 사업자 상품 등록 용
-    // private Long memberId; // 사업자 등록 용 #Product#memberId
-    private int OriginalPrice;
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     // 사업자 상품 등록 용
     public void addAttachmentCreateDto(AttachmentCreateDto attachmentCreateDto) {
         this.attachments.add(attachmentCreateDto);
     }
-<<<<<<< HEAD
     private Product product;
 
 }
-=======
-
-    private Product product;
-
-}
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da

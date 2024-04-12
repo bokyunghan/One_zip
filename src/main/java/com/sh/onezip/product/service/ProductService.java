@@ -90,17 +90,11 @@ public class ProductService {
     AttachmentService attachmentService;
     @Autowired
     ProductOptionService productOptionService;
-<<<<<<< HEAD
 
     ObjectMapper objectMapper = new ObjectMapper();
 
     // variable 선언 end
-=======
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
-    ObjectMapper objectMapper = new ObjectMapper();
-
-    // variable 선언 end
 
     // KMJ start
 
@@ -132,12 +126,7 @@ public class ProductService {
         ProductListDto productListDto = modelMapper.map(product, ProductListDto.class);
         productListDto.setMemberName(product.getMember().getName());
         productListDto.setApplyPrice((int) (product.getProductPrice() * (1 - product.getDiscountRate())));
-<<<<<<< HEAD
         productListDto.setAttachmentList(attachmentRepository.findProductAttachmentToList(productListDto.getId(), "SP"));
-=======
-        productListDto
-                .setAttachmentList(attachmentRepository.findProductAttachmentToList(productListDto.getId(), "SP"));
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         return productListDto;
     }
 
@@ -166,36 +155,20 @@ public class ProductService {
 
     public boolean postVerify(Map<String, String> requestData, Member member) {
         Payment payment = paymentRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
-<<<<<<< HEAD
         if((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
                 (payment.getAmount() == Integer.parseInt(requestData.get("amount")))){
-=======
-        if ((payment.getMerchantUid() == requestData.get("merchant_uid")) &&
-                (payment.getAmount() == Integer.parseInt(requestData.get("amount")))) {
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
             System.out.println("결제후 검증 완료!");
             return true;
         }
         return false;
     }
 
-<<<<<<< HEAD
 
     public void preVerify(Map<String, String> requestData, Member member) {
 
         ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid"))).orElse(null);
         Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
         ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId"))).orElse(null);;
-=======
-    public void preVerify(Map<String, String> requestData, Member member) {
-
-        ProductLog productLog = productLogRepository.findById(Long.parseLong(requestData.get("merchant_uid")))
-                .orElse(null);
-        Product product = productRepository.findById(Long.parseLong(requestData.get("productId"))).orElse(null);
-        ProductOption productOption = productOptionRepository.findById(Long.parseLong(requestData.get("productOptId")))
-                .orElse(null);
-        ;
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         int productQuantity = Integer.parseInt(requestData.get("productQuantity"));
 
         // 결제 객체 생성
@@ -210,19 +183,11 @@ public class ProductService {
                 .merchantUid(requestData.get("merchant_uid"))
                 .build();
 
-<<<<<<< HEAD
         int afterApplyPrice = (int)(productOption.getOptionCost() + (product.getProductPrice() * (1 - product.getDiscountRate())));
         System.out.println("afterApplyPrice: " + afterApplyPrice);
 
 
         //주문 객체 생성
-=======
-        int afterApplyPrice = (int) (productOption.getOptionCost()
-                + (product.getProductPrice() * (1 - product.getDiscountRate())));
-        System.out.println("afterApplyPrice: " + afterApplyPrice);
-
-        // 주문 객체 생성
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         OrderProduct orderProduct = OrderProduct
                 .builder()
                 .productLog(productLog)
@@ -241,30 +206,18 @@ public class ProductService {
         doProductRefund(accessToken, requestData);
     }
 
-<<<<<<< HEAD
     public String getAccessToken(){
 
         RestTemplate restTemplate = new RestTemplate();
 
 
-=======
-    public String getAccessToken() {
-
-        RestTemplate restTemplate = new RestTemplate();
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         // HttpHeaders 객체 생성 (header 설정)
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
 
         Map<String, String> responseBody = new HashMap<>();
-<<<<<<< HEAD
 //        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
 //        responseBody.put("imp_key", PORT_ONE_API_KEY);
-=======
-        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
-        responseBody.put("imp_key", PORT_ONE_API_KEY);
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
         String requestByJSON = null;
 
@@ -284,7 +237,6 @@ public class ProductService {
                 URI.create(url),
                 HttpMethod.POST,
                 httpEntity,
-<<<<<<< HEAD
                 Map.class
         );
 
@@ -293,23 +245,11 @@ public class ProductService {
         String accessToken = nextStrArrIndex[1];
 
 
-=======
-                Map.class);
-
-        String[] strArr = responseEntity.getBody().get("response").toString().split(",");
-        String[] nextStrArrIndex = strArr[0].split("=");
-        String accessToken = nextStrArrIndex[1];
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         return accessToken;
 
     }
 
-<<<<<<< HEAD
     public void doProductRefund(String accessToken, Map<String, String> requestData){
-=======
-    public void doProductRefund(String accessToken, Map<String, String> requestData) {
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         RestTemplate restTemplate = new RestTemplate();
 
         Long productLogId = Long.parseLong(requestData.get("merchant_uid"));
@@ -319,16 +259,10 @@ public class ProductService {
 
         System.out.println("requestData는 :" + requestData);
 
-<<<<<<< HEAD
 //        if(productLog.getShppingState().toString().equals("RE")){
 //
 //        }
 
-=======
-        // if(productLog.getShppingState().toString().equals("RE")){
-        //
-        // }
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
         // HttpHeaders 객체 생성 (header 설정)
         HttpHeaders headers = new HttpHeaders();
@@ -358,20 +292,13 @@ public class ProductService {
                 URI.create(url),
                 HttpMethod.POST,
                 httpEntity,
-<<<<<<< HEAD
                 Map.class
         );
-=======
-                Map.class);
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         System.out.println("flag-2:");
 
         System.out.println("responseEntity결제 취소 정보: " + responseEntity);
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     }
 
     // KMJ end

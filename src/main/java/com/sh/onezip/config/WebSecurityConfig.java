@@ -36,10 +36,6 @@ public class WebSecurityConfig {
                         .requestMatchers("/auth/**","/admin/memberList.do").permitAll()
                         .requestMatchers("/member/createMember.do","/member/checkIdDuplicate.do", "/member/selectMemberType.do").anonymous()
                         .requestMatchers("/board/**", "/member/passwordChange.do").authenticated()
-<<<<<<< HEAD
-=======
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
                         .requestMatchers("/business/**").authenticated()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/business/**").hasRole("BUSINESS")

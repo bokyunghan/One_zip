@@ -14,10 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-<<<<<<< HEAD
-=======
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 @Transactional
 @Service
 public class ProductQuestionService {
@@ -25,14 +21,12 @@ public class ProductQuestionService {
     ProductQuestionRepository productQuestionRepository;
     @Autowired
     ModelMapper modelMapper;
-
     public List<ProductQuestion> pquestionFindByProductid(Long id) {
         return productQuestionRepository.pquestionFindByProductid(id);
     }
 
     public Page<ProductQuestionDto> productQuestionDtoFindAllByProductId(Pageable pageable, Long productId) {
-        Page<ProductQuestion> productQuestionPage = productQuestionRepository
-                .productQuestionFindAllByProductId(pageable, productId);
+        Page<ProductQuestion> productQuestionPage = productQuestionRepository.productQuestionFindAllByProductId(pageable, productId);
         return productQuestionPage.map((productQuestion) -> convertToProductQuestionDto(productQuestion));
     }
 
@@ -53,7 +47,6 @@ public class ProductQuestionService {
     public void createQuestion(ProductQuestionCreateDto productQuestionCreateDto) {
         ProductQuestion productQuestion = modelMapper.map(productQuestionCreateDto, ProductQuestion.class);
         productQuestionRepository.save(productQuestion);
-
     }
 
     public ProductQuestion findQuestionById(Long questionId) {
@@ -69,13 +62,8 @@ public class ProductQuestionService {
         return productQuestionRepository.findByPQId(id);
     }
 
-<<<<<<< HEAD
 
     // HBK start
 
 
-=======
-    // HBK start
-
->>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 }

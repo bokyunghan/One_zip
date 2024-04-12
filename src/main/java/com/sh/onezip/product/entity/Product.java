@@ -21,13 +21,18 @@ import java.util.List;
 @ToString
 @Entity
 @Table(name = "tb_product")
-public class Product implements Comparable<Product> {
+public class Product implements Comparable<Product>{
 
     // KMJ start
 
     @Id
     @GeneratedValue(generator = "seq_tb_product_id_generator")
-    @SequenceGenerator(name = "seq_tb_product_id_generator", sequenceName = "seq_tb_product_id", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(
+            name = "seq_tb_product_id_generator",
+            sequenceName = "seq_tb_product_id",
+            initialValue = 1,
+            allocationSize = 1
+    )
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -54,7 +59,7 @@ public class Product implements Comparable<Product> {
 
     @Override
     public int compareTo(Product other) {
-        return (int) (this.id - other.id);
+        return (int)(this.id - other.id);
     }
 
     // KMJ end
