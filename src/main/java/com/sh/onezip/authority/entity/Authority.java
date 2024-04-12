@@ -44,7 +44,6 @@ public class Authority implements Serializable{
 //    @Column(nullable = false, name = "member_id")
 //    private String memberId;
 
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleAuth userType;

@@ -1,5 +1,6 @@
 package com.sh.onezip.member.dto;
 
+
 import com.sh.onezip.member.entity.Address;
 import com.sh.onezip.member.entity.AddressType; // AddressType 엔터티 또는 Enum을 사용한다고 가정
 

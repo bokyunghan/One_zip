@@ -216,8 +216,8 @@ public class ProductService {
         headers.set("Content-Type", "application/json");
 
         Map<String, String> responseBody = new HashMap<>();
-        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
-        responseBody.put("imp_key", PORT_ONE_API_KEY);
+//        responseBody.put("imp_secret", PORT_ONE_API_SECRET_KEY);
+//        responseBody.put("imp_key", PORT_ONE_API_KEY);
 
         String requestByJSON = null;
 

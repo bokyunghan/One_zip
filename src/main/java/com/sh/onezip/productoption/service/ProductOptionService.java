@@ -50,7 +50,6 @@ public class ProductOptionService {
 
         // 옵션 집합의 갯수
         int optionSetSize = optionListOfList.get(0).size();
-        System.out.println("optionSetSize: " + optionSetSize);
 //        int optTypeSize = optionListOfList.size();
 
         ProductOption productOption [] = new ProductOption[optionSetSize];
@@ -67,7 +66,6 @@ public class ProductOptionService {
             productOption[i].setTotalStock((Integer)optionListOfList.get(1).get(i));
             productOption[i].setOptionCost((Integer)optionListOfList.get(2).get(i));
             productOptionRepository.save(productOption[i]);
-            System.out.println("productOption[i]: " + productOption[i]);
         }
     }
 
