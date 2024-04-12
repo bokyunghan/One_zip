@@ -75,3 +75,9 @@ cloud:
       secret-key: ${AWS_S3_SECRET_ACCESS_KEY}
     region:
       static: ap-northeast-2
+# port-one
+port:
+  one:
+    api-key: ${PORT_ONE_API_KEY}
+    api-secret-key: ${PORT_ONE_API_SECRET_KEY}
+

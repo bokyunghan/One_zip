@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout/default}">
+<head>
+</head>
+<style layout:fragment="style">
+</style>
+<div layout:fragment="content">
+    <!-- nav start  -->
+    <div class="grid justify-items-center m-11 mx-64">
+        <div class="border-b border-gray-200">
+            <div class="sm:flex sm:items-baseline">
+                <div class="mt-4 sm:ml-10 sm:mt-0">
+                    <nav class="-mb-px flex space-x-8">
+                        <a th:href="@{'/business/productUpdateList.do?id=' + ${product.id}}" id="productUpdateButton" onclick="changeButtonStyle('productUpdateButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품상세페이지</a>
+                        <a th:href="@{'/business/businessQnACenter.do?id='+ ${product.id}}" id="businessQnACenter" onclick="changeButtonStyle('businessQnACenter')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품문의게시판</a>
+                        <a th:href="@{'/business/businessAllReview.do?id='+ ${product.id}}" id="productReviewButton" onclick="changeButtonStyle('productReviewButton')"
+                           class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 whitespace-nowrap border-b-2 px-1 pb-4 text-base font-medium">상품리뷰모음</a>
+                        <h3 class="text-base font-semibold leading-6 text-gray-900" id="businessPayDeliveryList" onclick="changeButtonStyle('businessPayDeliveryList')">
+                            상품결제 및 배송여부
+                        </h3>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- nav end  -->
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900 text-center">상품결제 및 배송여부 (Customer PayDeliveryList)</h2><br>
+    <p class="text-lg font-semibold text-gray-800 text-center">총 2건의 상품 질문이 조회되었습니다.</p><br>
+        <!-- 첫 번째 주문 정보 -->
+        <div class="min-w-0 flex-auto text-center">
+<!--            <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">-->
+            <div class="min-w-0 flex-auto">
+                <p class="text-base font-semibold leading-5 text-gray-900">상품 주문 일자 - 2024/04/03</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|주문 상품 정보 : ${product.productName}|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|최종 결제 금액 : ${product.productPrice}원|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">배송비(판매자) - 2500원</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">주문상태 - 배송완료</p>
+            </div>
+        </div> <br>
+        <!-- 두 번째 주문 정보 -->
+        <div class="min-w-0 flex-auto text-center">
+<!--            <img class="h-10 w-10 flex-none rounded-full bg-gray-50" src="https://mblogthumb-phinf.pstatic.net/MjAyMDA1MDZfNTYg/MDAxNTg4NzI1MTUzODQ4.BwsJ8pnxflMMXOJaOa2I4iS9Kafmbx6UFwX6m_D4iX4g.InicniBOi-zZKtGE4Pi6oHxqfEUBVZEqIdoA2YnYi5kg.JPEG.leejy826/output_3493099570.jpg?type=w800"  alt="">-->
+            <div class="min-w-0 flex-auto">
+                <p class="text-base font-semibold leading-5 text-gray-900">상품 주문 일자 - 2024/04/05</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|주문 상품 정보 : ${product.productName}|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500" th:text="|최종 결제 금액 : ${product.productPrice}원|"></p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">배송비(판매자) - 2500원</p>
+                <p class="mt-1 truncate text-xxs leading-4 text-gray-500">주문상태 - 상품준비중</p>
+            </div>
+        </div>
+
+
+
+<!--    <div class="pagination" style="text-align: center;">-->
+<!--        <ul class="pagination-list" style="display: flex; justify-content: center;">-->
+<!--            &lt;!&ndash; 이전 페이지 링크 &ndash;&gt;-->
+<!--            <li th:if="${number > 0}">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number - 1}, size=${size})}" class="pagination-link"> 이전페이지로 이동하기 </a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash; 페이지 번호 링크 &ndash;&gt;-->
+<!--            <li th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}" th:class="${pageNumber == number ? 'active' : ''}" class="pagination-item" style="margin: 0 5px;">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${pageNumber}, size=${size})}" th:text="${pageNumber + 1}" class="pagination-link" style="font-size: 16px;"></a>-->
+<!--            </li>-->
+<!--            &lt;!&ndash; 다음 페이지 링크 &ndash;&gt;-->
+<!--            <li th:if="${number + 1 < totalPages}">-->
+<!--                <a th:href="@{/business/businessQnACenter.do(id=${product.id}, page=${number + 1}, size=${size})}" class="pagination-link"> 다음페이지로 이동하기 </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+    <script layout:fragment="script">
+        // 페이지가 로드될 때 실행될 함수입니다.
+        document.addEventListener('DOMContentLoaded', function() {
+            // '상품문의게시판' 버튼과 '상품리뷰모음' 버튼을 가져옵니다.
+            const productUpdateButton = document.getElementById('productUpdateButton');
+            const productReviewButton = document.getElementById('productReviewButton');
+            const businessQnACenter = document.getElementById('businessQnACenter');
+            // '상품상세페이지' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            productUpdateButton.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('productUpdateButton');
+            });
+            // '상품리뷰모음' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            productReviewButton.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('productReviewButton');
+            });
+            // '질답게시판' 버튼을 클릭했을 때 호출될 함수를 정의합니다.
+            businessQnACenter.addEventListener('click', function() {
+                // 클릭된 버튼의 스타일을 변경하는 함수를 호출합니다.
+                changeButtonStyle('businessQnACenter');
+            });
+        });
+
+        // 버튼 스타일을 변경하는 함수입니다.
+        function changeButtonStyle(clickedId) {
+            // 모든 버튼 요소를 선택합니다.
+            const buttons = document.querySelectorAll('nav a');
+            // 각 버튼에 대해 스타일을 변경합니다.
+            buttons.forEach(button => {
+                // 기존 스타일 클래스를 제거합니다.
+                button.classList.remove('border-indigo-500', 'text-indigo-600');
+                // 새로운 스타일 클래스를 추가합니다.
+                button.classList.add('border-transparent', 'text-gray-500', 'hover:border-gray-300', 'hover:text-gray-700');
+            });
+            // 클릭된 버튼의 요소를 가져옵니다.
+            const clickedButton = document.getElementById(clickedId);
+            // 클릭된 버튼에 새로운 스타일 클래스를 추가하고, 기존 스타일 클래스를 제거합니다.
+            clickedButton.classList.add('border-indigo-500', 'text-indigo-600');
+            clickedButton.classList.remove('border-transparent', 'text-gray-500');
+        }
+
+    </script>
+</html>

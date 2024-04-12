@@ -1,5 +1,7 @@
 package com.sh.onezip.productquestion.repository;
 
+import com.sh.onezip.customerquestioncenter.entity.QuestionCenter;
+import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.productquestion.entity.ProductQuestion;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,4 +21,8 @@ public interface ProductQuestionRepository extends JpaRepository<ProductQuestion
     @Query("from ProductQuestion pq where pq.product.id = :productId")
     List<ProductQuestion> productQuestionFindAllByProductId(@Param("productId") Long productId);
 
+    // HBK start
+    @Query("select pq from ProductQuestion pq where pq.id = :id")
+    ProductQuestion findByPQId(@Param("id") Long id);
 }
+

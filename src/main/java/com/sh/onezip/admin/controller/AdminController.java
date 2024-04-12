@@ -162,7 +162,7 @@ public class AdminController {
 
     @PostMapping("/businessmemberList.do")
     public String businessmemberList(@RequestParam Long id,
-                                           RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes redirectAttributes) {
         businessService.deleteById(id);
         attachmentService.deleteByphotoId(id);
         return "redirect:/admin/businessmemberList.do";

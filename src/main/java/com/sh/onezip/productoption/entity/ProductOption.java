@@ -32,5 +32,4 @@ public class ProductOption {
     private int optionCost;
     @Column(name = "ne_option")
     private boolean neOption;
-
 }

@@ -10,14 +10,14 @@ import com.sh.onezip.business.dto.BusinessAllDto;
 import com.sh.onezip.business.dto.BusinessCreateDto;
 import com.sh.onezip.business.entity.BizAccess;
 import com.sh.onezip.business.service.BusinessService;
-import com.sh.onezip.member.dto.MemberCreateDto;
-import com.sh.onezip.member.dto.MemberDetailDto;
-import com.sh.onezip.member.dto.MemberUpdateDto;
+import com.sh.onezip.member.dto.*;
 import com.sh.onezip.member.entity.Address;
 import com.sh.onezip.member.entity.AddressType;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
+import com.sh.onezip.member.service.S3FileServices;
 import com.sh.onezip.service.NotificationService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -31,10 +31,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -62,6 +59,8 @@ public class MemberController {
     @Autowired
     private S3FileService s3FileService;
     @Autowired
+    private S3FileServices s3FileServices;
+    @Autowired
     private AttachmentService attachmentService;
     @Autowired
     private NotificationService notificationService;
@@ -71,45 +70,7 @@ public class MemberController {
     public void createMember() {
     }
 
-    /**
-     * 1. dto 유효성 검사
-     * 2. dto -> entity
-     * 3. 비밀번호 암호화처리 (PasswordEncoder)
-     * 4. 리다이렉트 후에 사용자 메세지
-     *
-     * @param memberCreateDto
-     * @param redirectAttributes
-     * @return
-     */
 
-//    @Transactional
-//    @PostMapping("/createMember.do")
-//    public String createMember(
-//            @Valid MemberCreateDto memberCreateDto,
-//            BindingResult bindingResult,
-//            RedirectAttributes redirectAttributes) {
-//        if(bindingResult.hasErrors()) {
-//            String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
-//            log.debug("message = {}", message);
-//            throw new RuntimeException(message);
-//        }
-//        log.debug("memberCreateDto = {}", memberCreateDto);
-//
-//        Member member = memberCreateDto.toMember();
-//        String encodePassword = passwordEncoder.encode(member.getPassword());
-//        member.setPassword(encodePassword);
-////        member = memberService.createMember(member);
-//
-//        Address address = memberCreateDto.toAddress(member);
-//        address.setRecipientName(member.getName());
-//        address.setAddressType(AddressType.D);
-//
-//        System.out.println(address);
-//        member = memberService.createMember(member, address);
-//
-//        redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
-//        return "redirect:/";
-//    }
     @Transactional
     @PostMapping("/createMember.do")
     public String createMember(
@@ -127,18 +88,13 @@ public class MemberController {
         Member member = memberCreateDto.toMember();
         member.setPassword(passwordEncoder.encode(member.getPassword()));
 
-        // Address 엔터티 생성
         Address address = memberCreateDto.toAddress(member);
-        // DTO에서 받은 recipientName과 recipientPhone 설정
         address.setRecipientName(memberCreateDto.getName());
         address.setRecipientPhone(memberCreateDto.getPhone());
-        // AddressType.D 설정
         address.setAddressType(AddressType.D);
 
-        // Member와 Address 엔터티 저장
         memberService.createMember(member, address);
 
-        // 회원가입 성공 메시지를 리다이렉트 어트리뷰트에 추가
         redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
         return "redirect:/";
     }
@@ -163,30 +119,43 @@ public class MemberController {
         return ResponseEntity.ok(resultMap);
     }
 
+    @GetMapping("/updateMember.do")
+    public void updateMember() {
+
+    }
+
 
     @PostMapping("/updateMember.do")
     public String updateMember(@Valid MemberUpdateDto memberUpdateDto,
+                               @RequestParam("upFile") MultipartFile upfile,
                                BindingResult bindingResult,
                                @AuthenticationPrincipal MemberDetails memberDetails,
-                               RedirectAttributes redirectAttributes) {
+                               RedirectAttributes redirectAttributes) throws IOException {
         log.debug("memberUpdateDto = {}", memberUpdateDto);
         if (bindingResult.hasErrors()) {
             StringBuilder message = new StringBuilder();
             bindingResult.getAllErrors().forEach((err) -> {
-                message.append(err.getDefaultMessage() + " ");
+                message.append(err.getDefaultMessage()).append(" ");
             });
             throw new RuntimeException(message.toString());
         }
 
-        // entity 업데이트
+        if (!upfile.isEmpty()) {
+            MemberProfileDto uploadedPhoto = s3FileServices.upload(upfile);
+            Member member = memberDetails.getMember();
+            member.setProfileKey(uploadedPhoto.getKey());
+            member.setProfileUrl(uploadedPhoto.getUrl());
+            log.debug("Uploaded Profile Photo: {}", uploadedPhoto);
+        }
+
         Member member = memberDetails.getMember();
         member.setName(memberUpdateDto.getName());
         member.setNickname(memberUpdateDto.getNickname());
         member.setHobby(memberUpdateDto.getHobby());
         member.setMbti(memberUpdateDto.getMbti());
+
         memberService.updateMember(member);
 
-        // security Authentication 갱신
         authService.updateAuthentication(member.getMemberId());
 
         redirectAttributes.addFlashAttribute("msg", "회원정보가 성공적으로 변경되었습니다. 🎊");
@@ -195,10 +164,85 @@ public class MemberController {
     }
 
 
+
     @GetMapping("/selectMemberType.do")
     public void selectMemberType() {
 
     }
+
+    @GetMapping("/passwordChange.do")
+    public void changePassword() {
+
+    }
+
+    @PostMapping("/passwordChange.do")
+    public String changePassword(
+            @Valid PasswordChangeDto passwordChangeDto,
+            BindingResult bindingResult,
+            @AuthenticationPrincipal MemberDetails memberDetails,
+            RedirectAttributes redirectAttributes) {
+
+        if (bindingResult.hasErrors()) {
+            StringBuilder message = new StringBuilder();
+            bindingResult.getAllErrors().forEach((err) -> {
+                message.append(err.getDefaultMessage()).append(" ");
+            });
+            throw new RuntimeException(message.toString());
+        }
+
+        Member member = memberDetails.getMember();
+        String encodedePassword = passwordEncoder.encode(passwordChangeDto.getNewPassword());
+        member.setPassword(encodedePassword);
+        memberService.updateMember(member);
+
+
+        authService.updateAuthentication(member.getMemberId());
+        redirectAttributes.addFlashAttribute("msg", "회원정보가 성공적으로 변경되었습니다. 🎊");
+        return "redirect:/";
+    }
+
+    @GetMapping("/manageAddresses.do")
+    public void manageAddresses(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
+        List<Address> addresses = memberService.getAddressesByMemberId(memberDetails.getMember().getId());
+        model.addAttribute("addresses", addresses);
+    }
+
+    @PostMapping("/addAddress.do")
+    public String addAddress(@Valid @ModelAttribute MemberAddressDto addressDto, BindingResult bindingResult, @AuthenticationPrincipal MemberDetails memberDetails, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/member/manageAddresses.do";
+        }
+
+        Address newAddress = modelMapper.map(addressDto, Address.class);
+        newAddress.setMember(memberDetails.getMember());
+        newAddress.setAddressType(AddressType.A);
+        memberService.addAddress(newAddress);
+        redirectAttributes.addFlashAttribute("msg", "새 배송지가 추가되었습니다.");
+        return "redirect:/member/manageAddresses.do";
+    }
+
+    @PostMapping("/deleteAddress.do")
+    public String deleteAddress(@RequestParam Long addressId, RedirectAttributes redirectAttributes) {
+        try {
+            memberService.deleteAddress(addressId);
+            redirectAttributes.addFlashAttribute("msg", "배송지가 삭제되었습니다.");
+        } catch (EntityNotFoundException enfe) {
+            redirectAttributes.addFlashAttribute("error", "해당 주소를 찾을 수 없습니다.");
+        } catch (IllegalStateException ise) {
+            redirectAttributes.addFlashAttribute("error", ise.getMessage());
+        }
+        return "redirect:/member/manageAddresses.do";
+    }
+
+    @PostMapping("/setDefaultAddress.do")
+    public String setDefaultAddress(@RequestParam Long addressId, @AuthenticationPrincipal MemberDetails memberDetails, RedirectAttributes redirectAttributes) {
+        memberService.setDefaultAddress(addressId, memberDetails.getMember().getId());
+        redirectAttributes.addFlashAttribute("msg", "기본 배송지가 설정되었습니다.");
+        return "redirect:/member/manageAddresses.do";
+    }
+
+
 
 
     // 여기까지가 HSH 코드
@@ -231,7 +275,7 @@ public class MemberController {
             log.debug("message = {}", message);
             throw new RuntimeException(message);
         }
-        // 첨부파일 S3에 저장
+
         for (MultipartFile upFile : upFiles) {
             if (upFile.getSize() > 0) {
                 AttachmentCreateDto attachmentCreateDto = s3FileService.upload(upFile);
