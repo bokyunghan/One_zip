@@ -22,8 +22,11 @@ public class Address {
             initialValue = 1,
             allocationSize = 1)
     private Long id;
+<<<<<<< HEAD
     //    @Column(nullable = false, unique = true)
 //    private String memberId;
+=======
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     @Column(nullable = false)
     private String recipientName;
     @Column(nullable = false)
@@ -39,4 +42,8 @@ public class Address {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+<<<<<<< HEAD
 }
+=======
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da

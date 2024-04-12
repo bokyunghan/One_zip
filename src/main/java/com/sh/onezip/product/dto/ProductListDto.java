@@ -2,6 +2,10 @@ package com.sh.onezip.product.dto;
 
 import com.sh.onezip.attachment.dto.AttachmentCreateDto;
 import com.sh.onezip.attachment.entity.Attachment;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.product.entity.Product;
 import com.sh.onezip.product.entity.ProductType;
@@ -31,6 +35,10 @@ public class ProductListDto {
 
     // 사업자 상품 수정 용
     private List<AttachmentCreateDto> attachments = new ArrayList<>(); // 사업자 상품 수정 용
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     public void addAttachmentCreateDto(AttachmentCreateDto attachmentCreateDto) {
         this.attachments.add(attachmentCreateDto);
     }

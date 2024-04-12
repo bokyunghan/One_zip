@@ -10,14 +10,36 @@ import com.sh.onezip.business.dto.BusinessAllDto;
 import com.sh.onezip.business.dto.BusinessCreateDto;
 import com.sh.onezip.business.entity.BizAccess;
 import com.sh.onezip.business.service.BusinessService;
+<<<<<<< HEAD
 import com.sh.onezip.member.dto.*;
+=======
+<<<<<<< HEAD
+import com.sh.onezip.member.dto.*;
+=======
+import com.sh.onezip.member.dto.MemberCreateDto;
+import com.sh.onezip.member.dto.MemberDetailDto;
+import com.sh.onezip.member.dto.MemberUpdateDto;
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 import com.sh.onezip.member.entity.Address;
 import com.sh.onezip.member.entity.AddressType;
 import com.sh.onezip.member.entity.Member;
 import com.sh.onezip.member.service.MemberService;
+<<<<<<< HEAD
 import com.sh.onezip.member.service.S3FileServices;
 import com.sh.onezip.service.NotificationService;
 import jakarta.persistence.EntityNotFoundException;
+=======
+<<<<<<< HEAD
+import com.sh.onezip.member.service.S3FileServices;
+import com.sh.onezip.service.NotificationService;
+=======
+import com.sh.onezip.service.NotificationService;
+import com.sh.onezip.auth.service.AuthService;
+import com.sh.onezip.member.dto.MemberCreateDto;
+import com.sh.onezip.member.entity.Member;
+>>>>>>> 286cabb8582b481cfeb5c6d4cd50cb29290293a9
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +53,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -38,6 +64,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.Map;
 
 @Controller
@@ -69,14 +96,30 @@ public class MemberController {
     @GetMapping("/createMember.do")
     public void createMember() {
     }
+<<<<<<< HEAD
 
 
+=======
+    /**
+     * 1. dto 유효성 검사
+     * 2. dto -> entity
+     * 3. 비밀번호 암호화처리 (PasswordEncoder)
+     * 4. 리다이렉트 후에 사용자 메세지
+     *
+     * @param memberCreateDto
+     * @param redirectAttributes
+     * @return
+     */
+
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     @Transactional
     @PostMapping("/createMember.do")
     public String createMember(
             @Valid MemberCreateDto memberCreateDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
+
         if (bindingResult.hasErrors()) {
             String message = bindingResult.getAllErrors().get(0).getDefaultMessage();
             log.debug("message = {}", message);
@@ -94,6 +137,10 @@ public class MemberController {
         address.setAddressType(AddressType.D);
 
         memberService.createMember(member, address);
+<<<<<<< HEAD
+=======
+        // 회원가입 성공 메시지를 리다이렉트 어트리뷰트에 추가
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
         redirectAttributes.addFlashAttribute("msg", "회원가입이 완료되었습니다.");
         return "redirect:/";
@@ -106,6 +153,7 @@ public class MemberController {
         MemberDetailDto memberDetailDto = modelMapper.map(member, MemberDetailDto.class);
 
         System.out.println(member);
+
         model.addAttribute("member", memberDetailDto);
         return "member/memberDetail";
     }
@@ -124,6 +172,52 @@ public class MemberController {
 
     }
 
+<<<<<<< HEAD
+=======
+
+    @PostMapping("/updateMember.do")
+    public String updateMember(@Valid MemberUpdateDto memberUpdateDto,
+                               @RequestParam("upFile") MultipartFile upfile,
+                               BindingResult bindingResult,
+                               @AuthenticationPrincipal MemberDetails memberDetails,
+                               RedirectAttributes redirectAttributes) throws IOException {
+        log.debug("memberUpdateDto = {}", memberUpdateDto);
+        if (bindingResult.hasErrors()) {
+            StringBuilder message = new StringBuilder();
+            bindingResult.getAllErrors().forEach((err) -> {
+                message.append(err.getDefaultMessage()).append(" ");
+            });
+            throw new RuntimeException(message.toString());
+        }
+
+        // 프로필 사진 업로드 처리
+        if (!upfile.isEmpty()) {
+            MemberProfileDto uploadedPhoto = s3FileServices.upload(upfile);
+            // 업로드된 프로필 사진의 정보를 Member 엔티티에 설정
+            Member member = memberDetails.getMember();
+            member.setProfileKey(uploadedPhoto.getKey());
+            member.setProfileUrl(uploadedPhoto.getUrl());
+            log.debug("Uploaded Profile Photo: {}", uploadedPhoto);
+        }
+
+        // 회원 정보 업데이트
+        Member member = memberDetails.getMember();
+        member.setName(memberUpdateDto.getName());
+        member.setNickname(memberUpdateDto.getNickname());
+        member.setHobby(memberUpdateDto.getHobby());
+        member.setMbti(memberUpdateDto.getMbti());
+
+        memberService.updateMember(member);
+
+        // 보안 인증 정보 갱신
+        authService.updateAuthentication(member.getMemberId());
+
+        redirectAttributes.addFlashAttribute("msg", "회원정보가 성공적으로 변경되었습니다. 🎊");
+
+        return "redirect:/member/memberDetail.do";
+    }
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
     @PostMapping("/updateMember.do")
     public String updateMember(@Valid MemberUpdateDto memberUpdateDto,
@@ -163,15 +257,26 @@ public class MemberController {
         return "redirect:/member/memberDetail.do";
     }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     @GetMapping("/selectMemberType.do")
     public void selectMemberType() {
 
     }
 
+<<<<<<< HEAD
     @GetMapping("/passwordChange.do")
     public void changePassword() {
+=======
+<<<<<<< HEAD
+    @GetMapping("/passwordChange.do")
+    public void changePassword() {
+        // 메소드 이름 변경: URL 패턴과 일치하게
+        // 비밀번호 변경 폼 페이지 경로 반환
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
 
     }
 
@@ -205,6 +310,10 @@ public class MemberController {
     public void manageAddresses(@AuthenticationPrincipal MemberDetails memberDetails, Model model) {
         List<Address> addresses = memberService.getAddressesByMemberId(memberDetails.getMember().getId());
         model.addAttribute("addresses", addresses);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
     }
 
     @PostMapping("/addAddress.do")
@@ -224,6 +333,7 @@ public class MemberController {
 
     @PostMapping("/deleteAddress.do")
     public String deleteAddress(@RequestParam Long addressId, RedirectAttributes redirectAttributes) {
+<<<<<<< HEAD
         try {
             memberService.deleteAddress(addressId);
             redirectAttributes.addFlashAttribute("msg", "배송지가 삭제되었습니다.");
@@ -232,6 +342,10 @@ public class MemberController {
         } catch (IllegalStateException ise) {
             redirectAttributes.addFlashAttribute("error", ise.getMessage());
         }
+=======
+        memberService.deleteAddress(addressId);
+        redirectAttributes.addFlashAttribute("msg", "배송지가 삭제되었습니다.");
+>>>>>>> 5434c6a07934405903206e99c77cede8199d98da
         return "redirect:/member/manageAddresses.do";
     }
 
@@ -327,6 +441,7 @@ public class MemberController {
         // 회원 정보 설정
         Member member = memberDetails.getMember();
         businessAllDto.setMember(member);
+
 
 //        // 사업자 고유번호 수정되지 않도록 처리
 //        BusinessAllDto bizId = businessService.findByBId(businessAllDto.getId());

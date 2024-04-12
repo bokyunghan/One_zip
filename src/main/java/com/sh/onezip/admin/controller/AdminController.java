@@ -31,6 +31,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -77,8 +87,11 @@ public class AdminController {
         model.addAttribute("members", memberPage.getContent()); // 회원 목록을 나타내는 리스트
         model.addAttribute("totalCount", memberPage.getTotalElements()); // 전체 회원수
         model.addAttribute("memberCount", calculateMemberCount(memberPage.getContent(), RoleAuth.ROLE_USER)); // 일반 회원 수
-        model.addAttribute("businessCount", calculateMemberCount(memberPage.getContent(), RoleAuth.ROLE_BUSINESS)); // 사업자 회원 수
-        model.addAttribute("adminCount", calculateMemberCount(memberPage.getContent(), RoleAuth.ROLE_ADMIN)); // 관리자 회원 수
+        model.addAttribute("businessCount", calculateMemberCount(memberPage.getContent(), RoleAuth.ROLE_BUSINESS)); // 사업자
+                                                                                                                    // 회원
+                                                                                                                    // 수
+        model.addAttribute("adminCount", calculateMemberCount(memberPage.getContent(), RoleAuth.ROLE_ADMIN)); // 관리자 회원
+                                                                                                              // 수
         model.addAttribute("size", memberPage.getSize()); // 페이지당 표시되는 회원 수
         model.addAttribute("number", memberPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", memberPage.getTotalPages()); // 전체 페이지 수
@@ -107,11 +120,10 @@ public class AdminController {
 
     @PostMapping("/memberList.do")
     public String memberList(@RequestParam Long id,
-                             RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         memberService.deleteById(id);
         return "redirect:/admin/memberList.do";
     }
-
 
     @GetMapping("/businessmemberList.do")
     public void businessMemberLists(@PageableDefault(size = 8, page = 0) Pageable pageable, Model model) {
@@ -134,9 +146,14 @@ public class AdminController {
         }
         model.addAttribute("bizmembers", businessPage.getContent()); // 회원 목록을 나타내는 리스트
         model.addAttribute("totalCount", businessPage.getTotalElements()); // 사업자 전체 회원 수
-        model.addAttribute("businessACount", calculateBizMemberCount(businessPage.getContent(), BizAccess.A)); // 사업자 승인 회원 수
-        model.addAttribute("businessWCount", calculateBizMemberCount(businessPage.getContent(), BizAccess.W)); // 사업자 회원 대기 처리 수
-        model.addAttribute("businessDCount", calculateBizMemberCount(businessPage.getContent(), BizAccess.D)); // 사업자 회원 반려 처리 수
+        model.addAttribute("businessACount", calculateBizMemberCount(businessPage.getContent(), BizAccess.A)); // 사업자 승인
+                                                                                                               // 회원 수
+        model.addAttribute("businessWCount", calculateBizMemberCount(businessPage.getContent(), BizAccess.W)); // 사업자 회원
+                                                                                                               // 대기 처리
+                                                                                                               // 수
+        model.addAttribute("businessDCount", calculateBizMemberCount(businessPage.getContent(), BizAccess.D)); // 사업자 회원
+                                                                                                               // 반려 처리
+                                                                                                               // 수
         model.addAttribute("size", businessPage.getSize()); // 페이지당 표시되는 회원 수
         model.addAttribute("number", businessPage.getNumber()); // 현재 페이지 번호
         model.addAttribute("totalPages", businessPage.getTotalPages()); // 전체 페이지 수
@@ -162,24 +179,24 @@ public class AdminController {
 
     @PostMapping("/businessmemberList.do")
     public String businessmemberList(@RequestParam Long id,
-                                     RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
+
         businessService.deleteById(id);
         attachmentService.deleteByphotoId(id);
         return "redirect:/admin/businessmemberList.do";
     }
 
     @GetMapping("/businessmemberDetailList.do")
-    public void businessmemberDetailList(@RequestParam Long id, Model model){
+    public void businessmemberDetailList(@RequestParam Long id, Model model) {
         BusinessAllDto adminbusiness = businessService.findBizAmember(id);
-        model.addAttribute("bizimage", attachmentService.findByIdWithType(id,"SP"));
+        model.addAttribute("bizimage", attachmentService.findByIdWithType(id, "SP"));
         model.addAttribute("bizmember", adminbusiness);
     }
 
-
     @PostMapping("/businessmemberDetailList.do")
     public String businessmemberDetailList(@RequestParam Long id,
-                                           @RequestParam String bizRegStatus,
-                                           RedirectAttributes redirectAttributes) {
+            @RequestParam String bizRegStatus,
+            RedirectAttributes redirectAttributes) {
         // 1. 매개변수 확인
         System.out.println("ID: " + id);
         System.out.println("BizRegStatus: " + bizRegStatus);
@@ -217,7 +234,6 @@ public class AdminController {
         return "redirect:/admin/businessmemberDetailList.do?id=" + id;
     }
 
-
     @GetMapping("/customerACenterList.do")
     public void customerCenterLists(@PageableDefault(size = 8, page = 0) Pageable pageable, Model model) {
 
@@ -238,7 +254,6 @@ public class AdminController {
         model.addAttribute("answerN", calculateAnswerCount(questionCenterPages.getContent(), AnswerCheck.N)); // 미 답변 수
         model.addAttribute("answerY", calculateAnswerCount(questionCenterPages.getContent(), AnswerCheck.Y)); // 답변 완료 수
 
-
     }
 
     private long calculateAnswerCount(List<QuestionCenter> content, AnswerCheck answerCheck) {
@@ -249,7 +264,7 @@ public class AdminController {
 
     @PostMapping("/customerACenterList.do")
     public String customerCenterList(@RequestParam Long id,
-                                     RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         questionCenterService.deleteByQId(id);
         return "redirect:/admin/customerACenterList.do";
     }
@@ -264,11 +279,12 @@ public class AdminController {
         model.addAttribute("question", questionCenter);
         model.addAttribute("answer", answerCenter); // AnswerCenter 모델에 추가
     }
+
     @PostMapping("/customerACenterDetailList.do")
     public String customerACenterDetailList(@RequestParam Long id,
-                                            @RequestParam String aoneContent,
-                                            @RequestParam String memberId,
-                                            RedirectAttributes redirectAttributes) {
+            @RequestParam String aoneContent,
+            @RequestParam String memberId,
+            RedirectAttributes redirectAttributes) {
 
         // 문의글 고유번호로 문의 정보 조회
         QuestionCenter questionCenter = questionCenterService.findByQId(id);
@@ -301,9 +317,10 @@ public class AdminController {
 
     @PostMapping("/customerACenterUpdateList.do")
     public String customerACenterUpdateList(@RequestParam Long id,
-                                            @RequestParam String newAoneContent,
-                                            @RequestParam Long memberId, // 회원 ID 파라미터 추가(회원고유번호)
-                                            RedirectAttributes redirectAttributes) {
+            @RequestParam String newAoneContent,
+            @RequestParam Long memberId, // 회원 ID 파라미터 추가(회원고유번호)
+
+            RedirectAttributes redirectAttributes) {
 
         // 답변 고유번호로 기존 답변을 찾음
         Optional<AnswerCenter> answerCenter = answerCenterService.findById(id);
@@ -314,11 +331,12 @@ public class AdminController {
             AnswerCenter newAnswer = answerCenter.get();
             newAnswer.setAoneContent(newAoneContent);
 
-//            // 회원 ID에 해당하는 회원 객체 가져오기
-//            Member member = memberService.findByAOneMemberId(memberId);
+            // // 회원 ID에 해당하는 회원 객체 가져오기
+            // Member member = memberService.findByAOneMemberId(memberId);
 
             // 가져온 회원 객체를 답변에 설정
-//            newAnswer.setMember(member);
+            // newAnswer.setMember(member);
+
             answerCenterService.updateAnswerCenter(newAnswer);
         } else {
             // 에러 페이지로 이동 (해당 답변을 찾지 못한 경우 또는 멤버를 찾지 못한 경우)
@@ -330,12 +348,22 @@ public class AdminController {
     }
 
     @GetMapping("/bizEmailSend.do")
-    public void bizEmailSend(@RequestParam Long id, Model model){
+    public void bizEmailSend(@RequestParam Long id, Model model) {
 
     }
-// HBK end
+    // HBK end
 }
 
-
-
-
+// @PostMapping("/boardUpdate.do")
+// public String update(BoardUpdateDto boardUpdateDto,
+// Model model,
+// @RequestParam("id") Long id,
+// RedirectAttributes redirectAttributes) {
+// log.debug("boardUpdateDto = {}" , boardUpdateDto);
+// BoardUpdateDto boardUpdateDto1 = boardService.update(boardUpdateDto);
+// model.addAttribute("boardUpdateDto", boardUpdateDto1);
+//
+// redirectAttributes.addFlashAttribute("msg", "게시글 수정이 완료되었습니다");
+//
+// return "redirect:/board/boardDetail.do?id=" + id;
+// }
